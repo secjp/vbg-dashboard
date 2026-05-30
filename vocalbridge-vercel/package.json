@@ -1,0 +1,8 @@
+{
+  "name": "vocalbridge-global",
+  "version": "1.0.0",
+  "description": "VocalBridge Global — Sistema Operacional",
+  "scripts": {
+    "start": "serve public"
+  }
+}

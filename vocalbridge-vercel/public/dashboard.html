@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VocalBridge Global — Sistema Operacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #050000;
+    --bg1:      #0a0000;
+    --bg2:      #110000;
+    --bg3:      #1a0000;
+    --red:      #c0392b;
+    --red2:     #e74c3c;
+    --red3:     #ff6b6b;
+    --dim:      #5a2a2a;
+    --muted:    #8a4a4a;
+    --text:     #e8c8c8;
+    --textbr:   #fff5f5;
+    --border:   #2a0505;
+    --border2:  #3a0a0a;
+    --green:    #2ecc71;
+    --amber:    #f39c12;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-head: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--bg); color: var(--text); font-family: var(--font-body); }
+  body { min-height: 100vh; }
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: var(--bg1); } ::-webkit-scrollbar-thumb { background: var(--red); }
+
+  /* PIXEL GRID */
+  .pixel-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(192,57,43,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(192,57,43,0.05) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .corner-dec {
+    position: fixed; pointer-events: none; z-index: 0;
+    width: 80px; height: 80px;
+    border-color: var(--red); border-style: solid; opacity: 0.3;
+  }
+  .corner-dec.tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+  .corner-dec.tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+  .corner-dec.bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+  .corner-dec.br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+  /* LAYOUT */
+  .app { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+  /* TOPBAR */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    padding: 14px 20px; margin-bottom: 20px;
+    background: var(--bg1); border: 1px solid var(--border2);
+    border-top: 2px solid var(--red);
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon { width: 42px; height: 42px; border: 1px solid var(--red); display: flex; align-items: center; justify-content: center; background: var(--bg3); font-size: 22px; color: var(--red2); }
+  .logo-text { font-family: var(--font-head); font-size: 14px; color: var(--textbr); letter-spacing: .1em; }
+  .logo-sub { font-size: 10px; color: var(--red); letter-spacing: .18em; margin-top: 2px; font-family: var(--font-mono); }
+  .sys-nodes { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .node { font-size: 10px; color: var(--muted); font-family: var(--font-mono); display: flex; align-items: center; gap: 5px; }
+  .node .val { color: var(--red2); }
+  .blink { width: 6px; height: 6px; border-radius: 50%; background: var(--red2); animation: blink 1.4s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
+
+  /* SCAN LINE */
+  .scan { height: 1px; background: var(--border); margin: 0 0 20px; overflow: hidden; position: relative; }
+  .scan::after { content:''; position:absolute; top:0; left:-40%; width:40%; height:100%; background: var(--red); animation: scan 3s linear infinite; }
+  @keyframes scan { to { left: 140%; } }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border2); }
+  .tab {
+    padding: 10px 22px; font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+    font-family: var(--font-mono); cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent;
+    border-top: 1px solid transparent; background: transparent; transition: all .2s;
+    margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--text); background: var(--bg1); }
+  .tab.active { color: var(--red2); border-bottom-color: var(--red2); border-top-color: var(--red); background: var(--bg1); }
+  .tab-icon { margin-right: 6px; font-size: 13px; vertical-align: -2px; }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── PANEL 1: DASHBOARD ── */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 16px; }
+  .kpi {
+    background: var(--bg1); border: 1px solid var(--border);
+    padding: 14px 16px; position: relative; overflow: hidden;
+    border-left: 3px solid var(--red);
+  }
+  .kpi-lbl { font-size: 9px; color: var(--muted); letter-spacing: .18em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+  .kpi-lbl i { color: var(--red); font-size: 13px; }
+  .kpi-num { font-size: 34px; font-weight: 700; color: var(--textbr); line-height: 1; font-family: var(--font-mono); }
+  .kpi-num sup { font-size: 16px; color: var(--red); }
+  .kpi-sub { font-size: 9px; color: var(--dim); margin-top: 4px; letter-spacing: .07em; }
+  .kpi-sub .up { color: var(--red2); }
+
+  .mid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .box { background: var(--bg1); border: 1px solid var(--border); padding: 14px 16px; }
+  .box-title { font-size: 9px; color: var(--red); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-mono); }
+  .live-pill { display: flex; align-items: center; gap: 4px; font-size: 9px; color: var(--red2); }
+
+  .prog-item { margin-bottom: 10px; }
+  .prog-meta { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-bottom: 3px; }
+  .prog-meta span:last-child { color: var(--text); font-family: var(--font-mono); }
+  .prog-track { height: 3px; background: var(--bg3); }
+  .prog-fill { height: 100%; background: var(--red); transition: width 1s ease; }
+
+  .bar-wrap { display: flex; align-items: flex-end; gap: 4px; height: 54px; margin-bottom: 4px; }
+  .bc { flex: 1; background: var(--red); min-height: 3px; transition: background .2s; }
+  .bc:hover { background: var(--red2); }
+  .day-row { display: flex; gap: 4px; }
+  .day-lbl { flex: 1; font-size: 9px; color: var(--dim); text-align: center; font-family: var(--font-mono); }
+
+  .table-wrap { background: var(--bg1); border: 1px solid var(--border); margin-bottom: 16px; }
+  .table-head { display: grid; grid-template-columns: 1fr 110px 70px; padding: 8px 16px; background: var(--bg2); font-size: 9px; color: var(--red); letter-spacing: .15em; text-transform: uppercase; font-family: var(--font-mono); border-bottom: 1px solid var(--border); }
+  .scroll-vp { height: 190px; overflow: hidden; position: relative; }
+  .scroll-vp::after { content:''; position:absolute; bottom:0; left:0; right:0; height:40px; background: linear-gradient(transparent, var(--bg1)); pointer-events:none; }
+  .scroll-list { animation: scrollUp 18s linear infinite; }
+  .scroll-list:hover { animation-play-state: paused; }
+  @keyframes scrollUp { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
+  .s-row { display: grid; grid-template-columns: 1fr 110px 70px; padding: 9px 16px; border-bottom: 1px solid var(--border); align-items: center; }
+  .s-row:hover { background: var(--bg2); }
+  .s-name { font-size: 12px; color: #c8a0a0; }
+  .badge { font-size: 9px; padding: 2px 8px; letter-spacing: .07em; text-transform: uppercase; font-family: var(--font-mono); text-align: center; border: 1px solid; }
+  .bd { background: #0a2a1a; color: #2ecc71; border-color: #1a4a2a; }
+  .bp { background: #2a1800; color: #f39c12; border-color: #4a3000; }
+  .bw { background: #1a0505; color: var(--red2); border-color: var(--red); }
+  .s-time { font-size: 9px; color: var(--dim); font-family: var(--font-mono); text-align: right; }
+
+  .dash-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .vb-btn {
+    font-size: 10px; padding: 7px 14px; cursor: pointer; border: 1px solid var(--border2);
+    background: transparent; color: var(--red); letter-spacing: .12em; text-transform: uppercase;
+    font-family: var(--font-mono); transition: all .2s;
+  }
+  .vb-btn:hover { background: var(--bg2); border-color: var(--red); }
+  .vb-btn.solid { background: var(--red); color: #fff; border-color: var(--red); }
+  .vb-btn.solid:hover { background: var(--red2); }
+
+  /* ── PANEL 2: MATCH SYSTEM ── */
+  .match-layout { display: grid; grid-template-columns: 380px 1fr; gap: 16px; }
+  @media(max-width:800px) { .match-layout { grid-template-columns: 1fr; } .mid-grid { grid-template-columns: 1fr; } }
+
+  .search-box { background: var(--bg1); border: 1px solid var(--border2); padding: 20px; border-top: 2px solid var(--red); }
+  .search-title { font-family: var(--font-head); font-size: 12px; color: var(--textbr); letter-spacing: .1em; margin-bottom: 4px; }
+  .search-sub { font-size: 10px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 18px; }
+
+  .field-group { margin-bottom: 14px; }
+  .field-label { font-size: 9px; color: var(--red); letter-spacing: .18em; text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 6px; }
+  .vb-input {
+    width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border2);
+    color: var(--textbr); font-family: var(--font-mono); font-size: 13px; outline: none;
+    transition: border-color .2s;
+  }
+  .vb-input:focus { border-color: var(--red); }
+  .vb-input::placeholder { color: var(--dim); }
+
+  .profile-card { background: var(--bg2); border: 1px solid var(--border); padding: 16px; margin-bottom: 14px; display: none; }
+  .profile-card.show { display: block; }
+  .profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .profile-avatar { width: 44px; height: 44px; background: var(--bg3); border: 1px solid var(--red); display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 14px; color: var(--red2); }
+  .profile-name { font-size: 15px; font-weight: 600; color: var(--textbr); }
+  .profile-id { font-size: 10px; color: var(--red); font-family: var(--font-mono); }
+  .profile-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+  .tag { font-size: 9px; padding: 3px 9px; border: 1px solid var(--red); color: var(--red2); background: var(--bg3); font-family: var(--font-mono); letter-spacing: .07em; }
+  .profile-meta { font-size: 10px; color: var(--muted); font-family: var(--font-mono); line-height: 1.7; }
+
+  .active-order-alert { background: #1a0a00; border: 1px solid #4a2a00; padding: 12px 14px; margin-bottom: 14px; display: none; }
+  .active-order-alert.show { display: block; }
+  .alert-title { font-size: 10px; color: #f39c12; font-family: var(--font-mono); letter-spacing: .12em; margin-bottom: 4px; }
+  .alert-body { font-size: 11px; color: #c8a050; }
+
+  /* MATCHES PANEL */
+  .matches-panel { background: var(--bg1); border: 1px solid var(--border2); padding: 20px; }
+  .matches-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .matches-title { font-family: var(--font-head); font-size: 11px; color: var(--textbr); letter-spacing: .1em; }
+  .match-count { font-size: 10px; color: var(--red); font-family: var(--font-mono); }
+
+  .match-card {
+    background: var(--bg2); border: 1px solid var(--border); padding: 14px 16px;
+    margin-bottom: 10px; position: relative; overflow: hidden; cursor: pointer;
+    transition: border-color .2s;
+  }
+  .match-card:hover { border-color: var(--red); }
+  .match-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background: var(--red); }
+  .match-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+  .match-job-title { font-size: 13px; font-weight: 600; color: var(--textbr); }
+  .match-score { font-family: var(--font-mono); font-size: 11px; padding: 2px 10px; background: var(--bg3); border: 1px solid; }
+  .match-score.high { color: var(--green); border-color: #1a4a2a; }
+  .match-score.mid { color: var(--amber); border-color: #4a3000; }
+  .match-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+  .match-tag { font-size: 9px; padding: 2px 7px; font-family: var(--font-mono); letter-spacing: .05em; }
+  .match-tag.hit { background: #0a1a0a; color: var(--green); border: 1px solid #1a3a1a; }
+  .match-tag.miss { background: var(--bg3); color: var(--dim); border: 1px solid var(--border); }
+  .match-meta { font-size: 10px; color: var(--muted); font-family: var(--font-mono); display: flex; gap: 14px; flex-wrap: wrap; }
+  .match-meta span { display: flex; align-items: center; gap: 4px; }
+  .match-meta i { font-size: 12px; color: var(--red); }
+
+  .match-empty { text-align: center; padding: 40px 20px; font-size: 11px; color: var(--dim); font-family: var(--font-mono); letter-spacing: .1em; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(5,0,0,0.92); align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--bg1); border: 1px solid var(--border2); border-top: 2px solid var(--red);
+    width: 100%; max-width: 480px; padding: 28px; position: relative;
+    animation: modalIn .2s ease;
+  }
+  @keyframes modalIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
+  .modal-title { font-family: var(--font-head); font-size: 13px; color: var(--textbr); letter-spacing: .1em; margin-bottom: 4px; }
+  .modal-sub { font-size: 10px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 20px; }
+  .modal-job { background: var(--bg2); border: 1px solid var(--border); padding: 14px; margin-bottom: 18px; }
+  .modal-job-title { font-size: 14px; font-weight: 600; color: var(--textbr); margin-bottom: 4px; }
+  .modal-job-meta { font-size: 10px; color: var(--muted); font-family: var(--font-mono); }
+  .modal-confirm-txt { font-size: 11px; color: var(--text); line-height: 1.7; margin-bottom: 20px; }
+  .modal-confirm-txt strong { color: var(--red2); }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 18px; }
+  .modal-close:hover { color: var(--red2); }
+
+  /* ORDERS PANEL */
+  .orders-panel { margin-top: 20px; }
+  .orders-title { font-size: 9px; color: var(--red); letter-spacing: .2em; text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 10px; }
+  .order-card { background: var(--bg2); border: 1px solid var(--border); padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .order-info { flex: 1; }
+  .order-job { font-size: 12px; color: var(--textbr); margin-bottom: 2px; }
+  .order-meta { font-size: 9px; color: var(--muted); font-family: var(--font-mono); }
+  .order-status { font-size: 9px; padding: 3px 9px; font-family: var(--font-mono); letter-spacing: .07em; border: 1px solid var(--amber); color: var(--amber); background: #2a1800; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+    background: var(--bg1); border: 1px solid var(--red); border-left: 3px solid var(--red2);
+    padding: 14px 20px; min-width: 280px; max-width: 380px;
+    animation: toastIn .3s ease; display: none;
+  }
+  .toast.show { display: block; }
+  @keyframes toastIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .toast-title { font-size: 11px; color: var(--red2); font-family: var(--font-mono); letter-spacing: .1em; margin-bottom: 4px; }
+  .toast-body { font-size: 11px; color: var(--text); line-height: 1.5; }
+
+  /* FOOTER */
+  .footer { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .footer-note { font-size: 9px; color: var(--dim); font-family: var(--font-mono); }
+  .footer-note code { background: var(--bg2); color: var(--muted); padding: 1px 5px; }
+  .footer-brand { font-family: var(--font-head); font-size: 10px; color: var(--border2); letter-spacing: .15em; }
+
+  /* SETUP BANNER */
+  .setup-banner { background: #1a0a00; border: 1px solid #5a2a00; padding: 10px 16px; margin-bottom: 16px; font-size: 10px; color: #c8800a; font-family: var(--font-mono); display: flex; align-items: center; gap: 8px; }
+  .setup-banner i { color: var(--amber); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="pixel-bg"></div>
+<div class="corner-dec tl"></div>
+<div class="corner-dec tr"></div>
+<div class="corner-dec bl"></div>
+<div class="corner-dec br"></div>
+
+<div class="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-icon">&#9670;</div>
+      <div>
+        <div class="logo-text">VocalBridge Global</div>
+        <div class="logo-sub">sistema operacional v2.1</div>
+      </div>
+    </div>
+    <div class="sys-nodes">
+      <div class="node"><span class="blink"></span><span class="val" id="sys-time">00:00:00</span></div>
+      <div class="node">nodo: <span class="val">VBG-MX-01</span></div>
+      <div class="node">estado: <span class="val">en línea</span></div>
+      <div class="node">pendientes: <span class="val" id="hdr-pending">45</span></div>
+    </div>
+  </div>
+
+  <div class="scan"></div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('dashboard')">
+      <i class="tab-icon">&#9632;</i>panel operacional
+    </button>
+    <button class="tab" onclick="switchTab('match')">
+      <i class="tab-icon">&#9670;</i>sistema de matching
+    </button>
+  </div>
+
+  <!-- ══ PANEL: DASHBOARD ══ -->
+  <div id="tab-dashboard" class="panel active">
+
+    <div class="setup-banner">
+      <i>&#9888;</i>
+      MODO DEMO — Para conectar datos reales: reemplaza <code>SUPABASE_URL</code> y <code>SUPABASE_ANON_KEY</code> en el script, y configura EmailJS con tu <code>SERVICE_ID</code>.
+    </div>
+
+    <div class="dash-actions">
+      <label class="vb-btn" style="cursor:pointer">
+        &#8593; cargar CSV
+        <input type="file" accept=".csv" id="csv-input" style="display:none">
+      </label>
+      <button class="vb-btn solid" id="play-btn" onclick="toggleAnim()">&#9654; iniciar flujo</button>
+      <button class="vb-btn" onclick="resetDemo()">&#8635; demo</button>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-lbl">&#10003; completadas</div>
+        <div class="kpi-num" id="v-done">180</div>
+        <div class="kpi-sub"><span class="up">+23</span> vs semana ant.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">&#9711; pendientes</div>
+        <div class="kpi-num" id="v-pend">45</div>
+        <div class="kpi-sub">requieren atención</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">&#8594; en progreso</div>
+        <div class="kpi-num" id="v-prog">23</div>
+        <div class="kpi-sub">activas ahora</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">&#9650; eficiencia</div>
+        <div class="kpi-num" id="v-rate">72<sup>%</sup></div>
+        <div class="kpi-sub">meta: 80%</div>
+      </div>
+    </div>
+
+    <div class="mid-grid">
+      <div class="box">
+        <div class="box-title">índices de carga <span class="live-pill"><span class="blink" style="width:5px;height:5px"></span>live</span></div>
+        <div class="prog-item"><div class="prog-meta"><span>progreso global</span><span id="pg-txt">72%</span></div><div class="prog-track"><div class="prog-fill" id="pg-fill" style="width:72%"></div></div></div>
+        <div class="prog-item"><div class="prog-meta"><span>capacidad operativa</span><span>86%</span></div><div class="prog-track"><div class="prog-fill" style="width:86%"></div></div></div>
+        <div class="prog-item"><div class="prog-meta"><span>tareas críticas</span><span id="crit-txt">8%</span></div><div class="prog-track"><div class="prog-fill" id="crit-fill" style="width:8%;background:var(--red2)"></div></div></div>
+        <div class="prog-item"><div class="prog-meta"><span>flujo semanal</span><span>61%</span></div><div class="prog-track"><div class="prog-fill" style="width:61%"></div></div></div>
+      </div>
+      <div class="box">
+        <div class="box-title">completadas — últimos 7 días</div>
+        <div class="bar-wrap" id="bc-bars"></div>
+        <div class="day-row" id="bc-days"></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-head"><span>nombre de tarea</span><span>estado</span><span style="text-align:right">hora</span></div>
+      <div class="scroll-vp"><div class="scroll-list" id="scroll-list"></div></div>
+    </div>
+
+  </div><!-- /dashboard -->
+
+  <!-- ══ PANEL: MATCHING ══ -->
+  <div id="tab-match" class="panel">
+
+    <div class="setup-banner">
+      <i>&#9888;</i>
+      MODO DEMO — Usuarios y tareas son de prueba. Conecta Supabase para datos reales. ID de prueba: <code>VBG-001</code>, <code>VBG-002</code>, <code>VBG-003</code>
+    </div>
+
+    <div class="match-layout">
+
+      <!-- LEFT: SEARCH -->
+      <div>
+        <div class="search-box">
+          <div class="search-title">Identificación de Talento</div>
+          <div class="search-sub">// ingresa tu ID de plataforma VocalBridge</div>
+
+          <div class="field-group">
+            <div class="field-label">ID de registro</div>
+            <input class="vb-input" id="talent-id-input" placeholder="ej: VBG-001 o 122454" autocomplete="off">
+          </div>
+          <button class="vb-btn solid" style="width:100%;padding:10px" onclick="searchTalent()">
+            &#9670; buscar perfil &amp; ejecutar matching
+          </button>
+        </div>
+
+        <!-- PROFILE CARD -->
+        <div class="profile-card" id="profile-card" style="margin-top:10px">
+          <div class="profile-header">
+            <div class="profile-avatar" id="profile-initials">VB</div>
+            <div>
+              <div class="profile-name" id="profile-name">—</div>
+              <div class="profile-id" id="profile-id-txt">—</div>
+            </div>
+          </div>
+          <div class="profile-tags" id="profile-tags"></div>
+          <div class="profile-meta" id="profile-meta"></div>
+        </div>
+
+        <!-- ACTIVE ORDER WARNING -->
+        <div class="active-order-alert" id="active-order-alert">
+          <div class="alert-title">&#9888; ORDEN ACTIVA — MATCHING BLOQUEADO</div>
+          <div class="alert-body" id="active-order-body">Tienes una tarea en curso. Debes completarla antes de aceptar una nueva asignación.</div>
+        </div>
+
+        <!-- ORDERS HISTORY -->
+        <div class="orders-panel" id="orders-panel" style="display:none">
+          <div class="orders-title">// historial de órdenes</div>
+          <div id="orders-list"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: MATCHES -->
+      <div class="matches-panel">
+        <div class="matches-header">
+          <div class="matches-title">Tareas Compatibles</div>
+          <div class="match-count" id="match-count">// esperando ID...</div>
+        </div>
+        <div id="matches-container">
+          <div class="match-empty">[ ingresa un ID para iniciar el matching ]</div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /match -->
+
+  <div class="footer">
+    <div class="footer-note">
+      integración: <code>Supabase</code> + <code>EmailJS</code> &nbsp;|&nbsp;
+      notificaciones: <code>ops@vocalbridge.com</code> &nbsp;|&nbsp;
+      matching: regla 40% compatibilidad
+    </div>
+    <div class="footer-brand">VBG OPS</div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&#10005;</button>
+    <div class="modal-title">Confirmar Asignación</div>
+    <div class="modal-sub">// revisa los detalles antes de confirmar</div>
+    <div class="modal-job" id="modal-job-info"></div>
+    <div class="modal-confirm-txt" id="modal-confirm-txt"></div>
+    <div class="modal-actions">
+      <button class="vb-btn" onclick="closeModal()">cancelar</button>
+      <button class="vb-btn solid" onclick="confirmMatch()">&#10003; confirmar asignación</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-title" id="toast-title">notificación</div>
+  <div class="toast-body" id="toast-body"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   CONFIG — reemplaza con tus credenciales reales
+   ═══════════════════════════════════════════════════════ */
+const CONFIG = {
+  // SUPABASE — https://supabase.com (gratis)
+  SUPABASE_URL:      'https://TU-PROYECTO.supabase.co',   // ← reemplaza
+  SUPABASE_ANON_KEY: 'TU_ANON_KEY',                       // ← reemplaza
+
+  // EMAILJS — https://emailjs.com (gratis 200 emails/mes)
+  EMAILJS_SERVICE_ID:  'service_xxxxxxx',   // ← reemplaza
+  EMAILJS_TEMPLATE_ID: 'template_xxxxxxx',  // ← reemplaza
+  EMAILJS_PUBLIC_KEY:  'xxxxxxxxxxxxxxx',   // ← reemplaza
+
+  // Email corporativo que recibirá la notificación
+  NOTIFY_EMAIL: 'ops@vocalbridge.com',      // ← reemplaza
+
+  // Umbral mínimo de coincidencia de skills (0.4 = 40%)
+  MATCH_THRESHOLD: 0.40,
+};
+
+/* ═══════════════════════════════════════════════════════
+   DEMO DATA — se reemplaza con Supabase en producción
+   ═══════════════════════════════════════════════════════ */
+const DEMO_TALENTS = {
+  'VBG-001': { id:'VBG-001', name:'Sofía Ramírez', initials:'SR', skills:['narración','voz en off','español neutro','trabajo remoto'], availability:'disponible', orders:[] },
+  'VBG-002': { id:'VBG-002', name:'Carlos Mendez', initials:'CM', skills:['doblaje','animación','trabajo remoto','inglés'], availability:'disponible', orders:[] },
+  'VBG-003': { id:'VBG-003', name:'Ana Torres',    initials:'AT', skills:['narración','e-learning','voz corporativa'], availability:'disponible', orders:[{ job:'Narración publicitaria — Latam', status:'en progreso', date:'2025-05-28' }] },
+  '122454':  { id:'122454',  name:'Luis Herrera',  initials:'LH', skills:['narración','trabajo remoto','locución comercial','voz masculina'], availability:'disponible', orders:[] },
+};
+
+const DEMO_JOBS = [
+  { id:'JOB-101', title:'Narración corporativa — E-learning', skills:['narración','voz en off','trabajo remoto'], pay:'$320 USD', duration:'3 días', remote:true },
+  { id:'JOB-102', title:'Doblaje serie animación (ES-MX)',    skills:['doblaje','animación','español neutro'],    pay:'$580 USD', duration:'5 días', remote:false },
+  { id:'JOB-103', title:'Voz en off publicitaria — Digital',  skills:['voz en off','locución comercial','trabajo remoto'], pay:'$200 USD', duration:'1 día', remote:true },
+  { id:'JOB-104', title:'Audiolibro — No ficción',            skills:['narración','español neutro','voz masculina'], pay:'$750 USD', duration:'7 días', remote:true },
+  { id:'JOB-105', title:'IVR / Asistente telefónico',         skills:['voz corporativa','locución comercial','trabajo remoto'], pay:'$150 USD', duration:'2 días', remote:true },
+  { id:'JOB-106', title:'Podcast corporativo — Serie',        skills:['narración','e-learning','trabajo remoto'], pay:'$400 USD', duration:'4 días', remote:true },
+  { id:'JOB-107', title:'Doblaje videojuego — NPC voices',    skills:['doblaje','animación','inglés','trabajo remoto'], pay:'$620 USD', duration:'6 días', remote:true },
+  { id:'JOB-108', title:'Formación online — Compliance',      skills:['e-learning','voz corporativa','español neutro'], pay:'$280 USD', duration:'2 días', remote:true },
+];
+
+const DASH_TASKS = [
+  {name:'Informe de análisis de usuario',status:'done',time:'09:12'},
+  {name:'Revisión de diseño de interfaz',status:'done',time:'09:45'},
+  {name:'Documentación de API REST',status:'progress',time:'10:20'},
+  {name:'Optimización de base de datos',status:'pending',time:'11:00'},
+  {name:'Redacción de casos de prueba',status:'done',time:'11:30'},
+  {name:'Revisión de código — módulo A',status:'done',time:'13:15'},
+  {name:'Actualización de proceso de despliegue',status:'progress',time:'14:00'},
+  {name:'Recopilación de comentarios cliente',status:'pending',time:'14:30'},
+  {name:'Informe semanal de operaciones',status:'pending',time:'15:00'},
+  {name:'Análisis de vulnerabilidades',status:'done',time:'15:40'},
+  {name:'Actualización de hoja de ruta',status:'progress',time:'16:10'},
+  {name:'Configuración de alertas',status:'pending',time:'16:45'},
+  {name:'Entrevista de usuarios — Latam',status:'done',time:'17:00'},
+  {name:'Desarrollo función de exportación',status:'pending',time:'17:30'},
+];
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════ */
+let S = { done:180, pending:45, progress:23 };
+let animOn = false, animTimer = null;
+let currentTalent = null;
+let pendingMatchJob = null;
+// In-memory orders store (persists during session; in prod use Supabase)
+let ordersStore = {};
+
+/* ═══════════════════════════════════════════════════════
+   SUPABASE HELPERS (stub — replace with real calls)
+   ═══════════════════════════════════════════════════════ */
+async function dbGetTalent(id) {
+  // PRODUCTION: uncomment and use real Supabase fetch
+  /*
+  const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/talents?id=eq.${id}&select=*`, {
+    headers: { 'apikey': CONFIG.SUPABASE_ANON_KEY, 'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}` }
+  });
+  const data = await res.json();
+  return data[0] || null;
+  */
+  // DEMO:
+  return DEMO_TALENTS[id] || null;
+}
+
+async function dbGetJobs() {
+  // PRODUCTION:
+  /*
+  const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/jobs?status=eq.open&select=*`, {
+    headers: { 'apikey': CONFIG.SUPABASE_ANON_KEY, 'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}` }
+  });
+  return await res.json();
+  */
+  return DEMO_JOBS;
+}
+
+async function dbCreateOrder(talentId, job) {
+  const order = { talent_id: talentId, job_id: job.id, job_title: job.title, status:'en progreso', created_at: new Date().toISOString() };
+  // PRODUCTION:
+  /*
+  await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/orders`, {
+    method: 'POST',
+    headers: { 'apikey': CONFIG.SUPABASE_ANON_KEY, 'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify(order)
+  });
+  */
+  // DEMO — store in memory:
+  if (!ordersStore[talentId]) ordersStore[talentId] = [];
+  ordersStore[talentId].push(order);
+  return order;
+}
+
+async function dbGetActiveOrder(talentId) {
+  // PRODUCTION:
+  /*
+  const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/orders?talent_id=eq.${talentId}&status=eq.en progreso&select=*`, {
+    headers: { 'apikey': CONFIG.SUPABASE_ANON_KEY, 'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}` }
+  });
+  const data = await res.json();
+  return data[0] || null;
+  */
+  const list = ordersStore[talentId] || [];
+  return list.find(o => o.status === 'en progreso') || null;
+}
+
+/* ═══════════════════════════════════════════════════════
+   EMAILJS NOTIFY
+   ═══════════════════════════════════════════════════════ */
+function sendEmailNotification(talent, job) {
+  // PRODUCTION: uncomment after adding EmailJS SDK in <head>:
+  // <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  /*
+  emailjs.init(CONFIG.EMAILJS_PUBLIC_KEY);
+  emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, {
+    to_email:   CONFIG.NOTIFY_EMAIL,
+    talent_id:  talent.id,
+    talent_name: talent.name,
+    job_title:  job.title,
+    job_id:     job.id,
+    match_date: new Date().toLocaleString('es-MX'),
+  });
+  */
+  // DEMO — log to console:
+  console.log(`[EMAIL SIMULADO] Notificación enviada a ${CONFIG.NOTIFY_EMAIL}:`, { talent: talent.name, job: job.title });
+  showToast('Notificación enviada', `Email enviado a ${CONFIG.NOTIFY_EMAIL} — ${talent.name} asignada a "${job.title}"`);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MATCHING ALGORITHM (40% threshold)
+   ═══════════════════════════════════════════════════════ */
+function computeMatch(talentSkills, jobSkills) {
+  const ts = talentSkills.map(s => s.toLowerCase());
+  const js = jobSkills.map(s => s.toLowerCase());
+  const hits = js.filter(s => ts.some(t => t.includes(s) || s.includes(t)));
+  const score = js.length > 0 ? hits.length / js.length : 0;
+  return { score: Math.round(score * 100), hits, misses: js.filter(s => !hits.includes(s)) };
+}
+
+/* ═══════════════════════════════════════════════════════
+   SEARCH & RENDER
+   ═══════════════════════════════════════════════════════ */
+async function searchTalent() {
+  const rawId = document.getElementById('talent-id-input').value.trim();
+  if (!rawId) { showToast('Error', 'Ingresa un ID válido'); return; }
+
+  document.getElementById('match-count').textContent = '// buscando...';
+  document.getElementById('matches-container').innerHTML = '<div class="match-empty">[ procesando... ]</div>';
+
+  const talent = await dbGetTalent(rawId);
+  if (!talent) {
+    document.getElementById('profile-card').classList.remove('show');
+    document.getElementById('matches-container').innerHTML = '<div class="match-empty">[ ID no encontrado en el sistema ]</div>';
+    document.getElementById('match-count').textContent = '// sin resultados';
+    showToast('ID no encontrado', `No existe el perfil "${rawId}" en la base de datos.`);
+    return;
+  }
+
+  currentTalent = talent;
+
+  // Render profile
+  document.getElementById('profile-card').classList.add('show');
+  document.getElementById('profile-initials').textContent = talent.initials;
+  document.getElementById('profile-name').textContent = talent.name;
+  document.getElementById('profile-id-txt').textContent = '// ID: ' + talent.id;
+  document.getElementById('profile-tags').innerHTML = talent.skills.map(s => `<span class="tag">${s}</span>`).join('');
+  document.getElementById('profile-meta').innerHTML = `disponibilidad: ${talent.availability}<br>skills: ${talent.skills.length} registradas`;
+
+  // Check active order
+  const activeOrder = await dbGetActiveOrder(talent.id);
+  const alertEl = document.getElementById('active-order-alert');
+  if (activeOrder) {
+    alertEl.classList.add('show');
+    document.getElementById('active-order-body').textContent = `Tarea activa: "${activeOrder.job_title}" — Estado: ${activeOrder.status}. Debes completarla antes de aceptar otra asignación.`;
+    document.getElementById('matches-container').innerHTML = '<div class="match-empty">[ matching bloqueado — orden activa en curso ]</div>';
+    document.getElementById('match-count').textContent = '// bloqueado';
+    renderOrders(talent.id);
+    return;
+  } else {
+    alertEl.classList.remove('show');
+  }
+
+  // Run matching
+  const jobs = await dbGetJobs();
+  const matched = jobs
+    .map(job => ({ job, ...computeMatch(talent.skills, job.skills) }))
+    .filter(m => m.score >= CONFIG.MATCH_THRESHOLD * 100)
+    .sort((a, b) => b.score - a.score);
+
+  renderMatches(matched);
+  renderOrders(talent.id);
+}
+
+function renderMatches(matches) {
+  const count = document.getElementById('match-count');
+  const container = document.getElementById('matches-container');
+
+  if (matches.length === 0) {
+    count.textContent = '// 0 coincidencias';
+    container.innerHTML = '<div class="match-empty">[ ninguna tarea supera el umbral de 40% de compatibilidad ]</div>';
+    return;
+  }
+
+  count.textContent = `// ${matches.length} tareas compatibles`;
+  container.innerHTML = matches.map(m => `
+    <div class="match-card" onclick="openModal(${JSON.stringify(m.job).replace(/"/g,'&quot;')}, ${m.score})">
+      <div class="match-card-top">
+        <div class="match-job-title">${m.job.title}</div>
+        <div class="match-score ${m.score >= 80 ? 'high' : 'mid'}">${m.score}% match</div>
+      </div>
+      <div class="match-tags">
+        ${m.hits.map(s => `<span class="match-tag hit">&#10003; ${s}</span>`).join('')}
+        ${m.misses.map(s => `<span class="match-tag miss">${s}</span>`).join('')}
+      </div>
+      <div class="match-meta">
+        <span>&#8212; ${m.job.pay}</span>
+        <span>&#9711; ${m.job.duration}</span>
+        <span>${m.job.remote ? '&#8594; remoto' : '&#8594; presencial'}</span>
+        <span style="color:var(--dim)">ID: ${m.job.id}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderOrders(talentId) {
+  const orders = ordersStore[talentId] || [];
+  const panel = document.getElementById('orders-panel');
+  const list = document.getElementById('orders-list');
+  if (orders.length === 0) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  list.innerHTML = orders.map(o => `
+    <div class="order-card">
+      <div class="order-info">
+        <div class="order-job">${o.job_title}</div>
+        <div class="order-meta">ID: ${o.job_id} &nbsp;|&nbsp; ${new Date(o.created_at).toLocaleDateString('es-MX')}</div>
+      </div>
+      <div class="order-status">${o.status}</div>
+    </div>
+  `).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════════ */
+function openModal(job, score) {
+  pendingMatchJob = job;
+  document.getElementById('modal-job-info').innerHTML = `
+    <div class="modal-job-title">${job.title}</div>
+    <div class="modal-job-meta">ID: ${job.id} &nbsp;|&nbsp; ${job.pay} &nbsp;|&nbsp; ${job.duration} &nbsp;|&nbsp; ${job.remote ? 'Remoto' : 'Presencial'}</div>
+  `;
+  document.getElementById('modal-confirm-txt').innerHTML = `
+    Compatibilidad: <strong>${score}%</strong><br>
+    Al confirmar, esta tarea quedará <strong>registrada como tu orden activa</strong>. No podrás aceptar otra hasta completarla.<br><br>
+    Se enviará una notificación automática a <strong>${CONFIG.NOTIFY_EMAIL}</strong>.
+  `;
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('show');
+  pendingMatchJob = null;
+}
+
+async function confirmMatch() {
+  if (!currentTalent || !pendingMatchJob) return;
+  closeModal();
+
+  await dbCreateOrder(currentTalent.id, pendingMatchJob);
+  sendEmailNotification(currentTalent, pendingMatchJob);
+
+  // Re-run search to update UI (shows blocked state)
+  await searchTalent();
+  showToast('Asignación confirmada', `${currentTalent.name} asignada a "${pendingMatchJob.title}"`);
+}
+
+/* ═══════════════════════════════════════════════════════
+   DASHBOARD LOGIC
+   ═══════════════════════════════════════════════════════ */
+function badge(s) {
+  if (s==='done')    return '<span class="badge bd">completada</span>';
+  if (s==='pending') return '<span class="badge bp">pendiente</span>';
+  return '<span class="badge bw">en progreso</span>';
+}
+
+function renderList(tasks) {
+  const rows = [...tasks,...tasks].map(t =>
+    `<div class="s-row"><span class="s-name">${t.name}</span>${badge(t.status)}<span class="s-time">${t.time||''}</span></div>`
+  ).join('');
+  document.getElementById('scroll-list').innerHTML = rows;
+  const dur = Math.max(12, tasks.length * 1.4);
+  document.getElementById('scroll-list').style.animation = `scrollUp ${dur}s linear infinite`;
+}
+
+function animNum(id, target) {
+  const el = document.getElementById(id);
+  const start = parseInt(el.textContent) || 0;
+  let i = 0; const steps = 30, delta = (target - start) / steps;
+  const t = setInterval(() => {
+    i++;
+    const v = Math.round(start + delta * i);
+    if (id === 'v-rate') el.innerHTML = `${v}<sup>%</sup>`;
+    else el.textContent = v;
+    if (i >= steps) {
+      if (id === 'v-rate') el.innerHTML = `${target}<sup>%</sup>`;
+      else el.textContent = target;
+      clearInterval(t);
+    }
+  }, 20);
+}
+
+function updateDash() {
+  const total = S.done + S.pending + S.progress;
+  const rate  = total > 0 ? Math.round(S.done / total * 100) : 0;
+  const crit  = total > 0 ? Math.round(S.pending / total * 100) : 0;
+  animNum('v-done', S.done); animNum('v-pend', S.pending);
+  animNum('v-prog', S.progress); animNum('v-rate', rate);
+  document.getElementById('pg-fill').style.width  = rate + '%';
+  document.getElementById('pg-txt').textContent   = rate + '%';
+  document.getElementById('crit-fill').style.width = crit + '%';
+  document.getElementById('crit-txt').textContent  = crit + '%';
+  document.getElementById('hdr-pending').textContent = S.pending;
+}
+
+function toggleAnim() {
+  const btn = document.getElementById('play-btn');
+  if (animOn) {
+    animOn = false; clearInterval(animTimer);
+    btn.textContent = '▶ iniciar flujo'; btn.className = 'vb-btn solid';
+  } else {
+    animOn = true;
+    btn.textContent = '⏸ pausar flujo'; btn.className = 'vb-btn';
+    animTimer = setInterval(() => {
+      const m = Math.min(Math.floor(Math.random() * 4) + 1, S.pending);
+      if (m > 0) { S.done += Math.ceil(m/2); S.progress += Math.floor(m/2); S.pending -= m; }
+      if (S.pending < 5) S.pending = Math.floor(Math.random() * 30) + 18;
+      updateDash();
+    }, 2000);
+  }
+}
+
+function resetDemo() {
+  S = { done:180, pending:45, progress:23 };
+  renderList(DASH_TASKS);
+  updateDash();
+}
+
+// CSV
+document.getElementById('csv-input').addEventListener('change', function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = function(ev) {
+    const lines = ev.target.result.trim().split('\n'); if (lines.length < 2) return;
+    const h = lines[0].split(',').map(x => x.trim().toLowerCase().replace(/"/g,''));
+    const ti = h.indexOf('task'), si = h.indexOf('status'), tmi = h.indexOf('time');
+    const di = h.indexOf('done'), pi = h.indexOf('pending'), wi = h.indexOf('progress');
+    if (ti >= 0 && si >= 0) {
+      const tasks = lines.slice(1).map(l => { const c = l.split(',').map(x => x.trim().replace(/"/g,'')); return { name: c[ti]||'—', status: c[si]||'pending', time: tmi >= 0 ? c[tmi] : '' }; }).filter(t => t.name);
+      S.done = tasks.filter(t=>t.status==='done').length;
+      S.pending = tasks.filter(t=>t.status==='pending').length;
+      S.progress = tasks.filter(t=>t.status==='progress').length;
+      renderList(tasks); updateDash();
+    } else if (di >= 0 || pi >= 0) {
+      const row = lines[1].split(',').map(x => parseInt(x.trim()) || 0);
+      if (di >= 0) S.done = row[di]; if (pi >= 0) S.pending = row[pi]; if (wi >= 0) S.progress = row[wi];
+      renderList(DASH_TASKS); updateDash();
+    }
+  }; r.readAsText(file);
+});
+
+/* ═══════════════════════════════════════════════════════
+   TABS & CLOCK
+   ═══════════════════════════════════════════════════════ */
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', ['dashboard','match'][i] === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function updateClock() {
+  const n = new Date();
+  document.getElementById('sys-time').textContent =
+    String(n.getHours()).padStart(2,'0') + ':' +
+    String(n.getMinutes()).padStart(2,'0') + ':' +
+    String(n.getSeconds()).padStart(2,'0');
+}
+
+function showToast(title, body) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-title').textContent = title;
+  document.getElementById('toast-body').textContent  = body;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 5000);
+}
+
+/* WEEKLY BARS */
+const WEEK = [18,24,31,27,38,22,35];
+const DAYS = ['L','M','X','J','V','S','D'];
+function renderBars() {
+  const max = Math.max(...WEEK);
+  document.getElementById('bc-bars').innerHTML = WEEK.map(v => `<div class="bc" style="height:${Math.round(v/max*100)}%"></div>`).join('');
+  document.getElementById('bc-days').innerHTML = DAYS.map(d => `<div class="day-lbl">${d}</div>`).join('');
+}
+
+// ENTER key on input
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('talent-id-input').addEventListener('keydown', e => { if(e.key==='Enter') searchTalent(); });
+});
+
+// INIT
+renderBars();
+renderList(DASH_TASKS);
+updateDash();
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+</body>
+</html>
