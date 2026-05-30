@@ -1,7 +1,8 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/dashboard", "dest": "/dashboard.html" },
-    { "src": "/", "dest": "/index.html" }
+    { "src": "/auth",      "dest": "/声橋-vercel/public/auth.html" },
+    { "src": "/dashboard", "dest": "/声橋-vercel/public/dashboard.html" },
+    { "src": "/",          "dest": "/声橋-vercel/public/index.html" }
   ]
 }
