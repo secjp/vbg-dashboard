@@ -9,7 +9,7 @@
 <style>
 :root{
   --bg:#040000;--bg1:#080000;--bg2:#100000;--bg3:#1a0000;
-  --red:#b02020;--red2:#e03030;--red3:#ff5555;
+  --red:#b02020;--red2:#e03030;
   --dim:#3a1010;--muted:#7a3a3a;--text:#ddbaba;--textbr:#fff5f5;
   --border:#1e0505;--border2:#2e0808;--border3:#4a1212;
   --green:#2ecc71;--amber:#f39c12;
@@ -21,43 +21,48 @@
 html,body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--red)}
 .pgrid{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(160,30,30,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(160,30,30,.05) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(160,30,30,.05) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(160,30,30,.05) 1px,transparent 1px);
   background-size:28px 28px}
 
 /* NAV */
-.nav{position:sticky;top:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;background:rgba(4,0,0,.96);border-bottom:1px solid var(--border2);backdrop-filter:blur(12px)}
+.nav{position:sticky;top:0;z-index:200;height:56px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 32px;
+  background:rgba(4,0,0,.96);border-bottom:1px solid var(--border2);backdrop-filter:blur(12px)}
 .nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,var(--red),transparent)}
 .nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
-.logo-hex{width:32px;height:32px;border:1.5px solid var(--red);background:var(--bg2);display:flex;align-items:center;justify-content:center;
+.logo-hex{width:32px;height:32px;border:1.5px solid var(--red);background:var(--bg2);
+  display:flex;align-items:center;justify-content:center;
   clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%)}
 .logo-hex span{font-family:var(--head);font-size:10px;font-weight:900;color:var(--red2)}
 .logo-name{font-family:var(--head);font-size:12px;font-weight:700;color:var(--textbr);letter-spacing:.1em}
 .logo-sub{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.15em}
-.nav-back{font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none;letter-spacing:.1em;
-  display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back{font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none;
+  letter-spacing:.1em;transition:color .2s}
 .nav-back:hover{color:var(--red2)}
 
 /* LAYOUT */
-.page{position:relative;z-index:1;min-height:calc(100vh - 56px);display:flex;align-items:flex-start;
-  justify-content:center;padding:44px 20px 60px;gap:52px;flex-wrap:wrap}
+.page{position:relative;z-index:1;min-height:calc(100vh - 56px);display:flex;
+  align-items:flex-start;justify-content:center;padding:44px 20px 60px;gap:52px;flex-wrap:wrap}
 
-/* LEFT PANEL */
-.left{width:300px;flex-shrink:0;padding-top:8px}
-.eyebrow{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.28em;text-transform:uppercase;
-  margin-bottom:12px;display:flex;align-items:center;gap:8px}
+/* LEFT */
+.left{width:290px;flex-shrink:0;padding-top:8px}
+.eyebrow{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.28em;
+  text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .eyebrow::before{content:'';width:20px;height:1px;background:var(--red)}
-.big-title{font-family:var(--head);font-size:26px;font-weight:900;color:var(--textbr);letter-spacing:.04em;line-height:1.1;margin-bottom:10px}
+.big-title{font-family:var(--head);font-size:24px;font-weight:900;color:var(--textbr);
+  letter-spacing:.04em;line-height:1.1;margin-bottom:10px}
 .big-title .a{color:var(--red2)}
-.desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
-.feats{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:22px}
+.feats{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
 .feat{display:flex;gap:10px;align-items:flex-start}
 .feat-dot{width:6px;height:6px;background:var(--red);flex-shrink:0;margin-top:6px}
 .feat-body{font-size:12px;color:var(--text);line-height:1.5}
 .feat-body strong{color:var(--textbr);font-size:11px;letter-spacing:.04em;display:block}
 .scan-line{height:1px;background:var(--border);position:relative;overflow:hidden;margin-bottom:18px}
-.scan-line::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;background:var(--red);animation:scan 3s linear infinite}
+.scan-line::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;
+  background:var(--red);animation:scan 3s linear infinite}
 @keyframes scan{to{left:140%}}
 .mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .ms{background:var(--bg1);border:1px solid var(--border);padding:10px 12px}
@@ -65,22 +70,26 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--body);min-hei
 .ms-l{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
 
 /* CARD */
-.card{width:100%;max-width:500px;background:var(--bg1);border:1px solid var(--border2);border-top:2px solid var(--red);padding:28px;position:relative}
+.card{width:100%;max-width:500px;background:var(--bg1);border:1px solid var(--border2);
+  border-top:2px solid var(--red);padding:28px;position:relative}
 .card-scan{height:1px;background:var(--border);overflow:hidden;position:relative;margin-bottom:22px}
-.card-scan::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;background:var(--red);animation:scan 4s linear infinite}
+.card-scan::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;
+  background:var(--red);animation:scan 4s linear infinite}
 
 /* TABS */
 .tabs{display:flex;border:1px solid var(--border);margin-bottom:22px}
-.tab{flex:1;padding:9px;text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);cursor:pointer;border:none;background:transparent;border-right:1px solid var(--border);transition:all .2s}
+.tab{flex:1;padding:9px;text-align:center;font-family:var(--mono);font-size:9px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;
+  border:none;background:transparent;border-right:1px solid var(--border);transition:all .2s}
 .tab:last-child{border-right:none}
 .tab:hover{color:var(--text);background:rgba(176,32,32,.06)}
 .tab.on{color:var(--red2);background:rgba(176,32,32,.1)}
 
-/* STEP BAR */
-.stepbar{display:flex;gap:0;margin-bottom:18px;border:1px solid var(--border)}
-.st{flex:1;padding:7px 8px;text-align:center;font-family:var(--mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--muted);border-right:1px solid var(--border);transition:all .3s}
+/* STEPS */
+.stepbar{display:flex;border:1px solid var(--border);margin-bottom:18px}
+.st{flex:1;padding:7px 6px;text-align:center;font-family:var(--mono);font-size:8px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  border-right:1px solid var(--border);transition:all .3s}
 .st:last-child{border-right:none}
 .st .sn{font-size:13px;font-weight:700;display:block;margin-bottom:1px}
 .st.done{color:var(--green);background:rgba(46,204,113,.05)}
@@ -91,11 +100,10 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--body);min-hei
 /* PANELS */
 .pnl{display:none}.pnl.on{display:block}
 
-/* FORM ELEMENTS */
-.sec{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.2em;text-transform:uppercase;
-  margin:18px 0 12px;padding-bottom:5px;border-bottom:1px solid var(--border)}
-.sec:first-child{margin-top:0}
-.sec::before{content:'// '}
+/* FORM */
+.sec{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.2em;
+  text-transform:uppercase;margin:18px 0 12px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.sec:first-child{margin-top:0}.sec::before{content:'// '}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .row1{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px}
 .fg{display:flex;flex-direction:column;gap:4px}
@@ -106,7 +114,7 @@ html,body{background:var(--bg);color:var(--text);font-family:var(--body);min-hei
 .inp:focus{border-color:var(--red)}
 .inp::placeholder{color:var(--dim);font-size:10px}
 .inp.err{border-color:var(--red2)}
-select.inp{cursor:pointer;appearance:none;-webkit-appearance:none}
+select.inp{cursor:pointer;appearance:none}
 textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
 .ferr{font-size:9px;color:var(--red2);font-family:var(--mono);margin-top:2px;display:none}
 .ferr.on{display:block}
@@ -117,22 +125,23 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
   border:1px solid var(--border);transition:border-color .2s}
 .ci:hover{border-color:var(--border3)}
 .ci input{display:none}
-.cb{width:12px;height:12px;border:1px solid var(--border3);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cb{width:12px;height:12px;border:1px solid var(--border3);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:all .2s}
 .ci input:checked ~ .cb{background:var(--red);border-color:var(--red)}
 .cb::after{content:'✓';font-size:9px;color:#fff;display:none}
 .ci input:checked ~ .cb::after{display:block}
 .ci-lbl{font-size:11px;color:var(--text)}
 
-/* SOCIAL BUTTONS */
-.social-hdr{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;
-  text-align:center;margin-bottom:12px;position:relative}
+/* SOCIAL */
+.social-hdr{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;
+  text-transform:uppercase;text-align:center;margin-bottom:12px;position:relative}
 .social-hdr::before,.social-hdr::after{content:'';position:absolute;top:50%;width:33%;height:1px;background:var(--border)}
 .social-hdr::before{left:0}.social-hdr::after{right:0}
 .sbtns{display:flex;flex-direction:column;gap:7px}
 .sbtn{display:flex;align-items:center;gap:11px;padding:11px 14px;
   border:1px solid var(--border2);background:var(--bg);color:var(--text);
   cursor:pointer;font-family:var(--body);font-size:13px;font-weight:500;
-  letter-spacing:.03em;width:100%;transition:all .2s}
+  width:100%;transition:all .2s}
 .sbtn:hover{border-color:var(--border3);background:var(--bg2);color:var(--textbr)}
 .sbtn svg{width:18px;height:18px;flex-shrink:0}
 .sbtn .arr{margin-left:auto;color:var(--dim);font-size:11px;transition:color .2s}
@@ -153,7 +162,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
 .vb.gh:hover{border-color:var(--border3);color:var(--textbr)}
 .vb.fw{width:100%;justify-content:center}
 
-/* LOADING */
+/* LOADER */
 .loader{display:none;position:absolute;inset:0;background:rgba(4,0,0,.88);
   align-items:center;justify-content:center;z-index:10;flex-direction:column;gap:10px}
 .loader.on{display:flex}
@@ -174,14 +183,13 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
   font-family:var(--mono);font-size:10px;color:var(--muted);line-height:2;text-align:left}
 .k{color:var(--red2)}.v{color:var(--green)}.c{color:var(--dim)}
 
-/* LOGIN NOTE */
+/* PREVIEW */
+.preview{background:var(--bg2);border:1px solid var(--border);padding:14px;margin-bottom:14px;
+  font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.9;max-height:240px;overflow-y:auto}
+
 .ln{font-size:11px;color:var(--dim);text-align:center;margin-top:14px;font-family:var(--mono);line-height:1.7}
 .ln a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border2)}
 .ln a:hover{color:var(--red2)}
-
-/* CONFIRM PREVIEW */
-.preview{background:var(--bg2);border:1px solid var(--border);padding:14px;margin-bottom:14px;
-  font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.9;max-height:260px;overflow-y:auto}
 
 @media(max-width:680px){
   .row2{grid-template-columns:1fr}
@@ -196,11 +204,11 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
 <div class="pgrid"></div>
 
 <nav class="nav">
-  <a href="/" class="nav-logo">
+  <a href="https://vbg-dashboard.vercel.app" class="nav-logo">
     <div class="logo-hex"><span>VB</span></div>
     <div><div class="logo-name">VocalBridge</div><div class="logo-sub">// GLOBAL</div></div>
   </a>
-  <a href="/" class="nav-back">&#8592; Volver al inicio</a>
+  <a href="https://vbg-dashboard.vercel.app" class="nav-back">&#8592; Volver al inicio</a>
 </nav>
 
 <div class="page">
@@ -211,10 +219,10 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
     <h1 class="big-title">Únete a la<br>red vocal <span class="a">global</span></h1>
     <p class="desc">Conectamos voces profesionales con oportunidades de narración, doblaje y locución en todo el mundo.</p>
     <div class="feats">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Matching inteligente</strong>Tareas compatibles con tu perfil al 40%+ de coincidencia</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Matching inteligente</strong>Tareas compatibles con tu perfil al 40%+</div></div>
       <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Panel operacional</strong>Visualiza estado, órdenes y métricas en tiempo real</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Red global</strong>Clientes de Google Cloud, AWS, Meta y 38+ países</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Notificaciones inmediatas</strong>Alertas de nuevas tareas por email y Telegram</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Red global</strong>Clientes en 38+ países</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Notificaciones inmediatas</strong>Alertas de nuevas tareas por email</div></div>
     </div>
     <div class="scan-line"></div>
     <div class="mini-stats">
@@ -230,13 +238,12 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
     <div class="loader" id="loader"><div class="spin"></div><div class="ltxt">enviando registro...</div></div>
     <div class="card-scan"></div>
 
-    <!-- TABS -->
     <div class="tabs">
       <button class="tab on" id="t-reg" onclick="mode('reg')">&#9670; Registro</button>
       <button class="tab" id="t-log" onclick="mode('log')">&#9633; Iniciar sesión</button>
     </div>
 
-    <!-- ══ REGISTER ══ -->
+    <!-- REGISTER -->
     <div id="m-reg">
       <div class="stepbar">
         <div class="st on" id="s1"><span class="sn">01</span>Básico</div>
@@ -251,11 +258,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
         <div class="s-icon">✓</div>
         <div class="s-title">¡Registro enviado!</div>
         <div class="s-id" id="done-id">VBG-XXXXXX</div>
-        <div class="s-desc">
-          Notificación enviada a <strong style="color:var(--red2)">support@vocalbridge.space</strong><br>
-          Recibirás confirmación en 24–48 horas.<br>
-          Guarda tu ID — lo necesitas para el matching.
-        </div>
+        <div class="s-desc">Notificación enviada a <strong style="color:var(--red2)">support@vocalbridge.space</strong><br>Recibirás confirmación en 24–48 horas.<br>Guarda tu ID para el sistema de matching.</div>
         <div class="code-block" id="done-data"></div>
       </div>
 
@@ -266,9 +269,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
           <div class="fg"><div class="lbl">Nombre <span class="r">*</span></div><input class="inp" id="fn" placeholder="Tu nombre"><div class="ferr" id="efn">Requerido</div></div>
           <div class="fg"><div class="lbl">Apellido <span class="r">*</span></div><input class="inp" id="fl" placeholder="Tu apellido"><div class="ferr" id="efl">Requerido</div></div>
         </div>
-        <div class="row1">
-          <div class="fg"><div class="lbl">Email <span class="r">*</span></div><input class="inp" id="fe" type="email" placeholder="tu@email.com"><div class="ferr" id="efe">Email inválido</div></div>
-        </div>
+        <div class="row1"><div class="fg"><div class="lbl">Email <span class="r">*</span></div><input class="inp" id="fe" type="email" placeholder="tu@email.com"><div class="ferr" id="efe">Email inválido</div></div></div>
         <div class="row2">
           <div class="fg">
             <div class="lbl">País <span class="r">*</span></div>
@@ -287,9 +288,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
             <div class="ferr" id="efla">Selecciona idioma</div>
           </div>
         </div>
-        <div class="row1">
-          <div class="fg"><div class="lbl">Telegram / WhatsApp</div><input class="inp" id="ftg" placeholder="@usuario o +52 1234567890"></div>
-        </div>
+        <div class="row1"><div class="fg"><div class="lbl">Telegram / WhatsApp</div><input class="inp" id="ftg" placeholder="@usuario o +52 1234567890"></div></div>
         <div class="acts"><button class="vb sol" onclick="next(1)">Siguiente &#8594;</button></div>
       </div>
 
@@ -338,9 +337,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
           </div>
           <div class="fg"><div class="lbl">Tarifa base (USD/hr)</div><input class="inp" id="fra" placeholder="ej: 25" type="number" min="0"></div>
         </div>
-        <div class="row1">
-          <div class="fg"><div class="lbl">Bio profesional breve</div><textarea class="inp" id="fbi" placeholder="Describe brevemente tu experiencia... (máx. 300 caracteres)" maxlength="300"></textarea></div>
-        </div>
+        <div class="row1"><div class="fg"><div class="lbl">Bio profesional</div><textarea class="inp" id="fbi" placeholder="Describe brevemente tu experiencia... (máx. 300 caracteres)" maxlength="300"></textarea></div></div>
         <div class="acts">
           <button class="vb gh" onclick="prev(2)">&#8592; Atrás</button>
           <button class="vb sol" onclick="next(2)">Siguiente &#8594;</button>
@@ -350,12 +347,8 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
       <!-- STEP 3 -->
       <div class="pnl" id="p3">
         <div class="sec">Portfolio y presencia digital</div>
-        <div class="row1">
-          <div class="fg"><div class="lbl">Demo / muestra de voz <span class="r">*</span></div><input class="inp" id="fdm" placeholder="https://soundcloud.com/tu-demo · Drive · YouTube..."><div class="ferr" id="efdm">Agrega al menos 1 link</div></div>
-        </div>
-        <div class="row1">
-          <div class="fg"><div class="lbl">Portfolio / Sitio web</div><input class="inp" id="fpo" placeholder="https://tuportfolio.com"></div>
-        </div>
+        <div class="row1"><div class="fg"><div class="lbl">Demo / muestra de voz <span class="r">*</span></div><input class="inp" id="fdm" placeholder="https://soundcloud.com/tu-demo · Drive · YouTube..."><div class="ferr" id="efdm">Agrega al menos 1 link</div></div></div>
+        <div class="row1"><div class="fg"><div class="lbl">Portfolio / Sitio web</div><input class="inp" id="fpo" placeholder="https://tuportfolio.com"></div></div>
         <div class="row2">
           <div class="fg"><div class="lbl">Casting Call Club / Voice123</div><input class="inp" id="fcc" placeholder="URL de tu perfil"></div>
           <div class="fg"><div class="lbl">Fiverr / Upwork</div><input class="inp" id="ffv" placeholder="URL de tu perfil"></div>
@@ -364,9 +357,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
           <div class="fg"><div class="lbl">Instagram</div><input class="inp" id="fig" placeholder="@usuario"></div>
           <div class="fg"><div class="lbl">LinkedIn</div><input class="inp" id="fli" placeholder="URL perfil"></div>
         </div>
-        <div class="row1">
-          <div class="fg"><div class="lbl">YouTube</div><input class="inp" id="fyt" placeholder="https://youtube.com/@tucanal"></div>
-        </div>
+        <div class="row1"><div class="fg"><div class="lbl">YouTube</div><input class="inp" id="fyt" placeholder="https://youtube.com/@tucanal"></div></div>
         <div class="row2">
           <div class="fg">
             <div class="lbl">¿Cómo encontraste VocalBridge?</div>
@@ -376,9 +367,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
             </select>
           </div>
         </div>
-        <div class="row1">
-          <div class="fg"><div class="lbl">Comentarios adicionales</div><textarea class="inp" id="fco" placeholder="Algo más que quieras compartir..." style="min-height:56px"></textarea></div>
-        </div>
+        <div class="row1"><div class="fg"><div class="lbl">Comentarios adicionales</div><textarea class="inp" id="fco" placeholder="Algo más que quieras compartir..." style="min-height:56px"></textarea></div></div>
         <div class="acts">
           <button class="vb gh" onclick="prev(3)">&#8592; Atrás</button>
           <button class="vb sol" onclick="next(3)">Revisar &#8594;</button>
@@ -402,13 +391,12 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
       </div>
     </div>
 
-    <!-- ══ LOGIN ══ -->
+    <!-- LOGIN -->
     <div id="m-log" style="display:none">
       <div style="text-align:center;margin-bottom:24px">
         <div style="font-family:var(--head);font-size:16px;font-weight:700;color:var(--textbr);letter-spacing:.08em;margin-bottom:5px">Acceso a plataforma</div>
         <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.15em">// autenticación segura</div>
       </div>
-
       <div class="social-hdr">continuar con</div>
       <div class="sbtns">
         <button class="sbtn" onclick="socialLogin('Google')">
@@ -424,125 +412,104 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
           Continuar con Discord <span class="arr">&#8594;</span>
         </button>
       </div>
-
       <div class="or">o acceso por ID</div>
       <div class="row1" style="margin-bottom:10px">
         <div class="fg"><div class="lbl">ID de registro VocalBridge</div><input class="inp" id="lid" placeholder="VBG-XXXXXX" autocomplete="off"></div>
       </div>
       <button class="vb sol fw" onclick="directLogin()">&#9670; Acceder al panel</button>
-
       <div class="ln">
         ¿Primera vez? <a href="#" onclick="mode('reg');return false">Crear cuenta gratis</a><br>
         ¿Olvidaste tu ID? <a href="mailto:support@vocalbridge.space">support@vocalbridge.space</a>
       </div>
     </div>
-
-  </div><!-- /card -->
-</div><!-- /page -->
+  </div>
+</div>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   ★ EMAILJS CONFIG
-   Reemplaza estos 3 valores después de crear tu cuenta
-   en emailjs.com (ver guía en README.md)
-═══════════════════════════════════════════════════ */
-const EJ_KEY      = 'EMAILJS_PUBLIC_KEY';   // ← paso 3 de la guía
-const EJ_SERVICE  = 'EMAILJS_SERVICE_ID';   // ← paso 4
-const EJ_TEMPLATE = 'EMAILJS_TEMPLATE_ID';  // ← paso 5
+/* ═══════════════════════════════════════
+   ★ EMAILJS — reemplaza los 3 valores
+   1. Regístrate en emailjs.com (gratis)
+   2. Crea un servicio de email
+   3. Crea un template con las variables
+   4. Copia las 3 claves aquí
+═══════════════════════════════════════ */
+const EJ_KEY      = 'PONy3wvtW-MxoIWvk';
+const EJ_SERVICE  = 'service_45xwmug';
+const EJ_TEMPLATE = 'template_4px9hlc';
 
 emailjs.init(EJ_KEY);
 
-/* ═══════════════════════════════════════════════════
-   TABS
-═══════════════════════════════════════════════════ */
+/* TABS */
 function mode(m){
-  document.getElementById('m-reg').style.display = m==='reg'?'block':'none';
-  document.getElementById('m-log').style.display = m==='log'?'block':'none';
-  document.getElementById('t-reg').classList.toggle('on', m==='reg');
-  document.getElementById('t-log').classList.toggle('on', m==='log');
+  document.getElementById('m-reg').style.display=m==='reg'?'block':'none';
+  document.getElementById('m-log').style.display=m==='log'?'block':'none';
+  document.getElementById('t-reg').classList.toggle('on',m==='reg');
+  document.getElementById('t-log').classList.toggle('on',m==='log');
 }
 
-/* ═══════════════════════════════════════════════════
-   STEPS
-═══════════════════════════════════════════════════ */
-let cur = 1;
+/* STEPS */
 function goStep(n){
   [1,2,3,4].forEach(i=>{
-    document.getElementById('p'+i).classList.toggle('on', i===n);
+    document.getElementById('p'+i).classList.toggle('on',i===n);
     const s=document.getElementById('s'+i);
     s.classList.remove('on','done');
-    if(i<n) s.classList.add('done');
-    if(i===n) s.classList.add('on');
+    if(i<n)s.classList.add('done');
+    if(i===n)s.classList.add('on');
   });
   document.getElementById('pf').style.width=(n/4*100)+'%';
-  cur=n;
-  if(n===4) buildPreview();
+  if(n===4)buildPreview();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-function next(from){ if(validate(from)) goStep(from+1); }
-function prev(from){ goStep(from-1); }
+function next(f){if(validate(f))goStep(f+1);}
+function prev(f){goStep(f-1);}
 
-/* ═══════════════════════════════════════════════════
-   VALIDATION
-═══════════════════════════════════════════════════ */
+/* VALIDATION */
 function req(id,eid,fn){
   const v=fn(document.getElementById(id));
   document.getElementById(id).classList.toggle('err',!v);
   document.getElementById(eid).classList.toggle('on',!v);
   return v;
 }
-function validate(step){
+function validate(s){
   let ok=true;
-  if(step===1){
+  if(s===1){
     ok=req('fn','efn',e=>e.value.trim()!='')&ok;
     ok=req('fl','efl',e=>e.value.trim()!='')&ok;
     ok=req('fe','efe',e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.value.trim()))&ok;
     ok=req('fc','efc',e=>e.value!='')&ok;
     ok=req('fla','efla',e=>e.value!='')&ok;
   }
-  if(step===2){
-    const styles=getStyles();
-    document.getElementById('est').classList.toggle('on',styles.length===0);
-    if(styles.length===0) ok=false;
+  if(s===2){
+    const st=getStyles();
+    document.getElementById('est').classList.toggle('on',st.length===0);
+    if(st.length===0)ok=false;
     ok=req('fex','efex',e=>e.value!='')&ok;
     ok=req('fmo','efmo',e=>e.value!='')&ok;
   }
-  if(step===3) ok=req('fdm','efdm',e=>e.value.trim().length>4)&ok;
-  if(step===4){
+  if(s===3)ok=req('fdm','efdm',e=>e.value.trim().length>4)&ok;
+  if(s===4){
     const tr=document.getElementById('ftr').checked;
     document.getElementById('etr').classList.toggle('on',!tr);
-    if(!tr) ok=false;
+    if(!tr)ok=false;
   }
   return ok;
 }
-
-function getStyles(){
-  return [...document.querySelectorAll('#sg input:checked')].map(c=>c.value);
-}
-
-/* ═══════════════════════════════════════════════════
-   COLLECT DATA
-═══════════════════════════════════════════════════ */
+function getStyles(){return[...document.querySelectorAll('#sg input:checked')].map(c=>c.value);}
+function v(id){return document.getElementById(id).value.trim();}
 function collect(){
-  return {
-    fullName:  (v('fn')+' '+v('fl')).trim(),
-    email:     v('fe'), country:  v('fc'), language: v('fla'),
-    telegram:  v('ftg'), styles:  getStyles().join(', '),
-    experience:v('fex'), modality:v('fmo'), equipment:v('feq'),
-    rate:      v('fra'), bio:     v('fbi'), demo:     v('fdm'),
-    portfolio: v('fpo'), ccc:     v('fcc'), fiverr:   v('ffv'),
-    instagram: v('fig'), linkedin:v('fli'), youtube:  v('fyt'),
-    source:    v('fsr'), comments:v('fco'),
+  return{
+    fullName:(v('fn')+' '+v('fl')).trim(),email:v('fe'),country:v('fc'),language:v('fla'),
+    telegram:v('ftg'),styles:getStyles().join(', '),experience:v('fex'),modality:v('fmo'),
+    equipment:v('feq'),rate:v('fra'),bio:v('fbi'),demo:v('fdm'),portfolio:v('fpo'),
+    ccc:v('fcc'),fiverr:v('ffv'),instagram:v('fig'),linkedin:v('fli'),youtube:v('fyt'),
+    source:v('fsr'),comments:v('fco'),
   };
 }
-function v(id){ return document.getElementById(id).value.trim(); }
 
-/* ═══════════════════════════════════════════════════
-   PREVIEW (step 4)
-═══════════════════════════════════════════════════ */
+/* PREVIEW */
 function buildPreview(){
   const d=collect();
-  document.getElementById('preview').innerHTML=`
-<span class="c">// información básica</span>
+  document.getElementById('preview').innerHTML=`<span class="c">// información básica</span>
 <span class="k">nombre:</span>     <span class="v">${d.fullName}</span>
 <span class="k">email:</span>      <span class="v">${d.email}</span>
 <span class="k">país:</span>       <span class="v">${d.country}</span>
@@ -552,80 +519,52 @@ function buildPreview(){
 <span class="k">estilos:</span>    <span class="v">${d.styles}</span>
 <span class="k">experiencia:</span><span class="v">${d.experience}</span>
 <span class="k">modalidad:</span>  <span class="v">${d.modality}</span>
-<span class="k">equipo:</span>     <span class="v">${d.equipment||'—'}</span>
 <span class="k">tarifa:</span>     <span class="v">${d.rate?'$'+d.rate+' USD/hr':'—'}</span>
 <span class="c">// portfolio</span>
 <span class="k">demo:</span>       <span class="v">${d.demo}</span>
 <span class="k">portfolio:</span>  <span class="v">${d.portfolio||'—'}</span>
-<span class="k">redes:</span>      <span class="v">${[d.instagram,d.linkedin,d.youtube,d.ccc,d.fiverr].filter(Boolean).join(' · ')||'—'}</span>
-<span class="k">fuente:</span>     <span class="v">${d.source||'—'}</span>`;
+<span class="k">redes:</span>      <span class="v">${[d.instagram,d.linkedin,d.youtube].filter(Boolean).join(' · ')||'—'}</span>`;
 }
 
-/* ═══════════════════════════════════════════════════
-   SUBMIT → EMAILJS
-═══════════════════════════════════════════════════ */
+/* SUBMIT */
 async function submit(){
-  if(!validate(4)) return;
+  if(!validate(4))return;
   const d=collect();
   const id='VBG-'+Math.random().toString(36).substr(2,6).toUpperCase();
   const ts=new Date().toLocaleString('es-MX');
-
   document.getElementById('loader').classList.add('on');
   document.getElementById('sub-btn').disabled=true;
-
-  try {
-    await emailjs.send(EJ_SERVICE, EJ_TEMPLATE, {
-      to_email:    'support@vocalbridge.space',
-      reg_id:      id,
-      reg_date:    ts,
-      full_name:   d.fullName,
-      email:       d.email,
-      country:     d.country,
-      language:    d.language,
-      telegram:    d.telegram||'—',
-      styles:      d.styles,
-      experience:  d.experience,
-      modality:    d.modality,
-      equipment:   d.equipment||'—',
-      rate:        d.rate||'—',
-      bio:         d.bio||'—',
-      demo:        d.demo,
-      portfolio:   d.portfolio||'—',
-      ccc:         d.ccc||'—',
-      fiverr:      d.fiverr||'—',
-      instagram:   d.instagram||'—',
-      linkedin:    d.linkedin||'—',
-      youtube:     d.youtube||'—',
-      source:      d.source||'—',
-      comments:    d.comments||'—',
+  try{
+    await emailjs.send(EJ_SERVICE,EJ_TEMPLATE,{
+      to_email:'support@vocalbridge.space',reg_id:id,reg_date:ts,
+      full_name:d.fullName,email:d.email,country:d.country,language:d.language,
+      telegram:d.telegram||'—',styles:d.styles,experience:d.experience,
+      modality:d.modality,equipment:d.equipment||'—',rate:d.rate||'—',bio:d.bio||'—',
+      demo:d.demo,portfolio:d.portfolio||'—',ccc:d.ccc||'—',fiverr:d.fiverr||'—',
+      instagram:d.instagram||'—',linkedin:d.linkedin||'—',youtube:d.youtube||'—',
+      source:d.source||'—',comments:d.comments||'—',
     });
-
     document.getElementById('loader').classList.remove('on');
     document.getElementById('pf').parentElement.style.display='none';
-    document.getElementById('s1').closest('.stepbar').style.display='none';
+    document.querySelector('.stepbar').style.display='none';
     [1,2,3,4].forEach(i=>document.getElementById('p'+i).classList.remove('on'));
-
     document.getElementById('done').classList.add('on');
     document.getElementById('done-id').textContent=id;
-    document.getElementById('done-data').innerHTML=`<span class="c">// datos registrados</span>\n<span class="k">id:</span> <span class="v">${id}</span>\n<span class="k">nombre:</span> <span class="v">${d.fullName}</span>\n<span class="k">email:</span> <span class="v">${d.email}</span>\n<span class="k">estilos:</span> <span class="v">${d.styles}</span>\n<span class="k">demo:</span> <span class="v">${d.demo}</span>`;
-
-  } catch(err) {
+    document.getElementById('done-data').innerHTML=`<span class="c">// registrado exitosamente</span>\n<span class="k">id:</span> <span class="v">${id}</span>\n<span class="k">nombre:</span> <span class="v">${d.fullName}</span>\n<span class="k">email:</span> <span class="v">${d.email}</span>\n<span class="k">estilos:</span> <span class="v">${d.styles}</span>`;
+  }catch(err){
     document.getElementById('loader').classList.remove('on');
     document.getElementById('sub-btn').disabled=false;
-    alert('Error al enviar. Por favor escríbenos directamente a support@vocalbridge.space\n\nError: '+err.text);
+    alert('Error al enviar. Escríbenos a support@vocalbridge.space\n\n'+JSON.stringify(err));
   }
 }
 
-/* ═══════════════════════════════════════════════════
-   SOCIAL LOGIN (conectar con Supabase Auth en producción)
-═══════════════════════════════════════════════════ */
 function socialLogin(p){
-  alert('Login con '+p+' — próximamente disponible.\n\nMientras tanto, regístrate con el formulario y te enviaremos tu ID de acceso.');
+  alert('Login con '+p+' — próximamente.\nPor ahora regístrate y te enviamos tu ID de acceso.');
 }
 function directLogin(){
   const id=document.getElementById('lid').value.trim();
   if(!id){alert('Ingresa tu ID de registro');return;}
-  window.location.href='/dashboard?id='+encodeURIComponent(id);
+  window.location.href='https://vbg-dashboard.vercel.app/dashboard?id='+encodeURIComponent(id);
 }
 </script>
 </body>

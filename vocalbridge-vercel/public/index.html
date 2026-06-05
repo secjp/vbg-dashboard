@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VocalBridge — Registro / Acceso</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<title>VocalBridge Global</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#040000;--bg1:#080000;--bg2:#100000;--bg3:#1a0000;
-  --red:#b02020;--red2:#e03030;
+  --red:#b02020;--red2:#e03030;--red3:#ff5555;
   --dim:#3a1010;--muted:#7a3a3a;--text:#ddbaba;--textbr:#fff5f5;
   --border:#1e0505;--border2:#2e0808;--border3:#4a1212;
   --green:#2ecc71;--amber:#f39c12;
@@ -18,554 +17,635 @@
   --body:'Rajdhani',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg1)}::-webkit-scrollbar-thumb{background:var(--red)}
+
 .pgrid{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:linear-gradient(rgba(160,30,30,.05) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(160,30,30,.05) 1px,transparent 1px);
+  background-image:linear-gradient(rgba(160,30,30,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(160,30,30,.05) 1px,transparent 1px);
   background-size:28px 28px}
 
-/* NAV */
-.nav{position:sticky;top:0;z-index:200;height:56px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 32px;
-  background:rgba(4,0,0,.96);border-bottom:1px solid var(--border2);backdrop-filter:blur(12px)}
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:60px;
+  display:flex;align-items:center;padding:0 40px;gap:0;
+  background:rgba(4,0,0,.93);border-bottom:1px solid var(--border2);backdrop-filter:blur(14px)}
 .nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,var(--red),transparent)}
-.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
-.logo-hex{width:32px;height:32px;border:1.5px solid var(--red);background:var(--bg2);
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:36px;flex-shrink:0}
+.logo-hex{width:36px;height:36px;border:1.5px solid var(--red);background:var(--bg2);
   display:flex;align-items:center;justify-content:center;
   clip-path:polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%)}
-.logo-hex span{font-family:var(--head);font-size:10px;font-weight:900;color:var(--red2)}
+.logo-hex span{font-family:var(--head);font-size:11px;font-weight:900;color:var(--red2)}
+.logo-wm{display:flex;flex-direction:column}
 .logo-name{font-family:var(--head);font-size:12px;font-weight:700;color:var(--textbr);letter-spacing:.1em}
-.logo-sub{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.15em}
-.nav-back{font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none;
-  letter-spacing:.1em;transition:color .2s}
-.nav-back:hover{color:var(--red2)}
+.logo-sub{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.15em;margin-top:1px}
+.nav-links{display:flex;align-items:center;flex:1}
+.nav-link{padding:0 14px;height:60px;display:flex;align-items:center;
+  font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;border:none;background:none;cursor:pointer;
+  position:relative;transition:color .2s;white-space:nowrap}
+.nav-link::after{content:'';position:absolute;bottom:0;left:14px;right:14px;height:2px;
+  background:var(--red2);transform:scaleX(0);transition:transform .2s}
+.nav-link:hover{color:var(--textbr)}.nav-link:hover::after{transform:scaleX(1)}
+.nav-link.active{color:var(--textbr)}.nav-link.active::after{transform:scaleX(1)}
+.nav-sp{flex:1}
+.nav-actions{display:flex;gap:8px;align-items:center}
+.nav-drop{position:relative}
+.nav-drop:hover .drop-menu{opacity:1;pointer-events:all;transform:translateY(0)}
+.drop-menu{position:absolute;top:100%;right:0;min-width:210px;
+  background:rgba(8,0,0,.98);border:1px solid var(--border2);border-top:2px solid var(--red);
+  padding:6px 0;opacity:0;pointer-events:none;transform:translateY(-6px);
+  transition:opacity .18s,transform .18s;backdrop-filter:blur(16px)}
+.drop-lbl{padding:6px 16px 3px;font-size:9px;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;font-family:var(--mono)}
+.drop-item{display:flex;align-items:center;gap:10px;padding:8px 16px;
+  font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;
+  transition:all .15s;cursor:pointer;background:none;border:none;width:100%;text-align:left;font-family:var(--body)}
+.drop-item:hover{color:var(--textbr);background:rgba(176,32,32,.09);padding-left:20px}
+.drop-sep{height:1px;background:var(--border);margin:4px 12px}
+.drop-badge{margin-left:auto;font-size:9px;padding:1px 6px;background:var(--red);color:#fff;font-family:var(--mono)}
+.btn-join{display:flex;align-items:center;gap:6px;padding:0 18px;height:34px;
+  background:var(--red);color:#fff;border:none;cursor:pointer;
+  font-family:var(--head);font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  transition:background .2s;position:relative;overflow:hidden}
+.btn-join:hover{background:var(--red2)}
+.btn-login{display:flex;align-items:center;gap:6px;padding:0 14px;height:34px;
+  background:transparent;border:1px solid var(--border2);color:var(--muted);cursor:pointer;
+  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;transition:all .2s}
+.btn-login:hover{border-color:var(--red);color:var(--textbr);background:rgba(176,32,32,.1)}
+.nav-toggle{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:6px;background:none;border:none}
+.nav-toggle span{width:20px;height:1.5px;background:var(--red);display:block;transition:all .3s}
 
-/* LAYOUT */
-.page{position:relative;z-index:1;min-height:calc(100vh - 56px);display:flex;
-  align-items:flex-start;justify-content:center;padding:44px 20px 60px;gap:52px;flex-wrap:wrap}
+/* ── HERO ── */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:100px 40px 80px;text-align:center}
+.hero-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:700px;
+  background:radial-gradient(ellipse,rgba(140,20,20,.2) 0%,transparent 70%);pointer-events:none}
+.hero-corner{position:absolute;pointer-events:none}
+.hero-corner.tl{top:80px;left:24px;width:56px;height:56px;border-top:1.5px solid var(--red);border-left:1.5px solid var(--red);opacity:.4}
+.hero-corner.tr{top:80px;right:24px;width:56px;height:56px;border-top:1.5px solid var(--red);border-right:1.5px solid var(--red);opacity:.4}
+.hero-corner.bl{bottom:60px;left:24px;width:56px;height:56px;border-bottom:1.5px solid var(--red);border-left:1.5px solid var(--red);opacity:.4}
+.hero-corner.br{bottom:60px;right:24px;width:56px;height:56px;border-bottom:1.5px solid var(--red);border-right:1.5px solid var(--red);opacity:.4}
+.scan-hero{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.scan-hero::after{content:'';position:absolute;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(176,32,32,.5),transparent);
+  animation:scan-v 8s linear infinite}
+@keyframes scan-v{0%{top:-2px}100%{top:100%}}
+.hero-eye{font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.3em;text-transform:uppercase;
+  margin-bottom:18px;display:flex;align-items:center;gap:10px;animation:fadeUp .6s ease .1s both}
+.hero-eye::before,.hero-eye::after{content:'';width:36px;height:1px;background:var(--red)}
+.hero-h1{font-family:var(--head);font-size:clamp(30px,5.5vw,68px);font-weight:900;
+  color:var(--textbr);letter-spacing:.05em;line-height:1.05;text-transform:uppercase;
+  margin-bottom:8px;animation:fadeUp .6s ease .2s both}
+.hero-h1 .ac{color:var(--red2)}
+.hero-h2{font-family:var(--head);font-size:clamp(10px,1.4vw,15px);font-weight:400;
+  color:var(--red);letter-spacing:.25em;text-transform:uppercase;margin-bottom:20px;animation:fadeUp .6s ease .3s both}
+.hero-desc{font-size:clamp(13px,1.8vw,17px);color:var(--muted);max-width:560px;
+  line-height:1.7;margin-bottom:36px;animation:fadeUp .6s ease .4s both}
+.hero-acts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:52px;animation:fadeUp .6s ease .5s both}
+.hbtn-join{display:flex;align-items:center;gap:8px;padding:13px 32px;
+  background:var(--red);color:#fff;border:none;cursor:pointer;
+  font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  text-decoration:none;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+  transition:background .2s;position:relative;overflow:hidden}
+.hbtn-join:hover{background:var(--red2)}
+.hbtn-sec{display:flex;align-items:center;gap:8px;padding:12px 26px;
+  background:transparent;color:var(--text);border:1px solid var(--border2);cursor:pointer;
+  font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;transition:all .2s}
+.hbtn-sec:hover{border-color:var(--red);color:var(--textbr);background:rgba(176,32,32,.08)}
+.hero-stats{display:flex;border:1px solid var(--border);animation:fadeUp .6s ease .6s both;flex-wrap:wrap}
+.hstat{padding:14px 28px;border-right:1px solid var(--border);text-align:center}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:var(--mono);font-size:22px;color:var(--textbr);display:block;line-height:1}
+.hstat-l{font-size:10px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-top:4px;display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* LEFT */
-.left{width:290px;flex-shrink:0;padding-top:8px}
-.eyebrow{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.28em;
-  text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.eyebrow::before{content:'';width:20px;height:1px;background:var(--red)}
-.big-title{font-family:var(--head);font-size:24px;font-weight:900;color:var(--textbr);
-  letter-spacing:.04em;line-height:1.1;margin-bottom:10px}
-.big-title .a{color:var(--red2)}
-.desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:22px}
-.feats{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
-.feat{display:flex;gap:10px;align-items:flex-start}
-.feat-dot{width:6px;height:6px;background:var(--red);flex-shrink:0;margin-top:6px}
-.feat-body{font-size:12px;color:var(--text);line-height:1.5}
-.feat-body strong{color:var(--textbr);font-size:11px;letter-spacing:.04em;display:block}
-.scan-line{height:1px;background:var(--border);position:relative;overflow:hidden;margin-bottom:18px}
-.scan-line::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;
-  background:var(--red);animation:scan 3s linear infinite}
-@keyframes scan{to{left:140%}}
-.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.ms{background:var(--bg1);border:1px solid var(--border);padding:10px 12px}
-.ms-n{font-family:var(--mono);font-size:18px;color:var(--textbr)}
-.ms-l{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
+/* ── SCAN LINE ── */
+.scan-bar{height:1px;background:var(--border);position:relative;overflow:hidden}
+.scan-bar::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;
+  background:var(--red);animation:scan-h 3s linear infinite}
+@keyframes scan-h{to{left:140%}}
 
-/* CARD */
-.card{width:100%;max-width:500px;background:var(--bg1);border:1px solid var(--border2);
-  border-top:2px solid var(--red);padding:28px;position:relative}
-.card-scan{height:1px;background:var(--border);overflow:hidden;position:relative;margin-bottom:22px}
-.card-scan::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;
-  background:var(--red);animation:scan 4s linear infinite}
+/* ── SECTION BASE ── */
+section{position:relative;z-index:1;padding:88px 40px}
+.sec-eyebrow{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.3em;
+  text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.sec-eyebrow::before{content:'';width:24px;height:1px;background:var(--red)}
+.sec-title{font-family:var(--head);font-size:clamp(20px,3vw,34px);font-weight:700;
+  color:var(--textbr);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px}
+.sec-desc{font-size:14px;color:var(--muted);max-width:580px;line-height:1.7;margin-bottom:48px}
 
-/* TABS */
-.tabs{display:flex;border:1px solid var(--border);margin-bottom:22px}
-.tab{flex:1;padding:9px;text-align:center;font-family:var(--mono);font-size:9px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer;
-  border:none;background:transparent;border-right:1px solid var(--border);transition:all .2s}
-.tab:last-child{border-right:none}
-.tab:hover{color:var(--text);background:rgba(176,32,32,.06)}
-.tab.on{color:var(--red2);background:rgba(176,32,32,.1)}
+/* ── OPPORTUNITIES SECTION ── */
+#opportunities{background:linear-gradient(to bottom,var(--bg),var(--bg1))}
+.opp-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.opp-filter{padding:6px 16px;border:1px solid var(--border2);background:transparent;
+  color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.1em;cursor:pointer;transition:all .2s}
+.opp-filter:hover{border-color:var(--border3);color:var(--textbr)}
+.opp-filter.on{background:var(--red);color:#fff;border-color:var(--red)}
+.opp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.opp-card{background:var(--bg1);border:1px solid var(--border);padding:18px;
+  border-left:3px solid var(--red);position:relative;transition:border-color .2s;cursor:pointer}
+.opp-card:hover{border-color:var(--red2);background:var(--bg2)}
+.opp-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.opp-title{font-size:14px;font-weight:600;color:var(--textbr);line-height:1.3}
+.opp-salary{font-family:var(--mono);font-size:11px;color:var(--red2);white-space:nowrap}
+.opp-company{font-size:11px;color:var(--muted);margin-bottom:8px}
+.opp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.opp-tag{font-size:9px;padding:2px 8px;border:1px solid var(--border);color:var(--muted);font-family:var(--mono);letter-spacing:.05em}
+.opp-tag.red{border-color:var(--red);color:var(--red2)}
+.opp-tag.grn{border-color:#1a4a2a;color:var(--green);background:#0a1a0a}
+.opp-meta{display:flex;gap:12px;font-size:10px;color:var(--dim);font-family:var(--mono)}
+.opp-time{position:absolute;top:14px;right:14px;font-size:9px;color:var(--dim);font-family:var(--mono)}
+.opp-more{text-align:center;margin-top:24px}
+.opp-more-btn{padding:10px 32px;border:1px solid var(--border2);background:transparent;
+  color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:.12em;cursor:pointer;transition:all .2s}
+.opp-more-btn:hover{border-color:var(--red);color:var(--textbr)}
 
-/* STEPS */
-.stepbar{display:flex;border:1px solid var(--border);margin-bottom:18px}
-.st{flex:1;padding:7px 6px;text-align:center;font-family:var(--mono);font-size:8px;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
-  border-right:1px solid var(--border);transition:all .3s}
-.st:last-child{border-right:none}
-.st .sn{font-size:13px;font-weight:700;display:block;margin-bottom:1px}
-.st.done{color:var(--green);background:rgba(46,204,113,.05)}
-.st.on{color:var(--red2);background:rgba(176,32,32,.1)}
-.progress{height:2px;background:var(--border);margin-bottom:20px}
-.pfill{height:100%;background:var(--red);transition:width .4s ease}
+/* ── ACADEMY SECTION ── */
+#academy{background:var(--bg1)}
+.academy-phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:48px}
+.phase-card{background:var(--bg);border:1px solid var(--border);padding:22px;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.phase-card.starter::before{background:var(--amber)}
+.phase-card.growth::before{background:var(--red2)}
+.phase-card.elite::before{background:var(--green)}
+.phase-badge{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  padding:3px 10px;margin-bottom:12px;display:inline-block}
+.phase-card.starter .phase-badge{background:rgba(243,156,18,.1);color:var(--amber);border:1px solid rgba(243,156,18,.3)}
+.phase-card.growth .phase-badge{background:rgba(224,48,48,.1);color:var(--red2);border:1px solid rgba(224,48,48,.3)}
+.phase-card.elite .phase-badge{background:rgba(46,204,113,.1);color:var(--green);border:1px solid rgba(46,204,113,.3)}
+.phase-title{font-family:var(--head);font-size:14px;font-weight:700;color:var(--textbr);margin-bottom:4px;letter-spacing:.06em}
+.phase-period{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:14px}
+.phase-rows{display:flex;flex-direction:column;gap:6px}
+.phase-row{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid var(--border)}
+.phase-row:last-child{border-bottom:none}
+.phase-row .ph-k{color:var(--muted);font-family:var(--mono);font-size:9px;letter-spacing:.08em}
+.phase-row .ph-v{color:var(--textbr);font-weight:600}
+.phase-row .ph-v.inc{color:var(--green)}
 
-/* PANELS */
-.pnl{display:none}.pnl.on{display:block}
+.levels-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:40px}
+.level-card{background:var(--bg);border:1px solid var(--border);padding:16px;display:flex;gap:14px;align-items:flex-start}
+.level-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--head);font-size:11px;font-weight:700;flex-shrink:0}
+.level-card.bronze .level-icon{background:rgba(176,102,20,.15);color:#c87820;border:1px solid rgba(176,102,20,.3)}
+.level-card.silver .level-icon{background:rgba(160,160,180,.1);color:#b0b8c8;border:1px solid rgba(160,160,180,.3)}
+.level-card.gold .level-icon{background:rgba(220,180,20,.1);color:#d4b020;border:1px solid rgba(220,180,20,.3)}
+.level-card.elite .level-icon{background:rgba(224,48,48,.1);color:var(--red2);border:1px solid rgba(224,48,48,.3)}
+.level-body{}
+.level-name{font-family:var(--head);font-size:12px;font-weight:700;color:var(--textbr);margin-bottom:2px;letter-spacing:.08em}
+.level-pts{font-family:var(--mono);font-size:10px;color:var(--red);margin-bottom:6px}
+.level-perks{font-size:11px;color:var(--muted);line-height:1.6}
 
-/* FORM */
-.sec{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.2em;
-  text-transform:uppercase;margin:18px 0 12px;padding-bottom:5px;border-bottom:1px solid var(--border)}
-.sec:first-child{margin-top:0}.sec::before{content:'// '}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.row1{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px}
-.fg{display:flex;flex-direction:column;gap:4px}
-.lbl{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono)}
-.lbl .r{color:var(--red2)}
-.inp{width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--textbr);
-  padding:9px 12px;font-family:var(--mono);font-size:12px;outline:none;transition:border-color .2s}
-.inp:focus{border-color:var(--red)}
-.inp::placeholder{color:var(--dim);font-size:10px}
-.inp.err{border-color:var(--red2)}
-select.inp{cursor:pointer;appearance:none}
-textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
-.ferr{font-size:9px;color:var(--red2);font-family:var(--mono);margin-top:2px;display:none}
-.ferr.on{display:block}
+.milestones{display:flex;flex-direction:column;gap:0}
+.milestone{display:flex;gap:20px;align-items:flex-start;padding:18px 0;border-bottom:1px solid var(--border)}
+.milestone:last-child{border-bottom:none}
+.ms-left{flex-shrink:0;text-align:center;width:70px}
+.ms-phase-tag{font-size:9px;font-family:var(--mono);letter-spacing:.08em;padding:2px 6px;margin-bottom:4px;display:inline-block}
+.ms-phase-tag.starter{background:rgba(243,156,18,.1);color:var(--amber);border:1px solid rgba(243,156,18,.2)}
+.ms-phase-tag.growth{background:rgba(224,48,48,.1);color:var(--red2);border:1px solid rgba(224,48,48,.2)}
+.ms-phase-tag.elite{background:rgba(46,204,113,.1);color:var(--green);border:1px solid rgba(46,204,113,.2)}
+.ms-time{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.ms-dot{width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:6px}
+.ms-body{}
+.ms-title{font-size:13px;font-weight:600;color:var(--textbr);margin-bottom:4px}
+.ms-desc{font-size:11px;color:var(--muted);line-height:1.6}
 
-/* CHECKBOXES */
-.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
-.ci{display:flex;align-items:center;gap:7px;cursor:pointer;padding:7px 9px;
-  border:1px solid var(--border);transition:border-color .2s}
-.ci:hover{border-color:var(--border3)}
-.ci input{display:none}
-.cb{width:12px;height:12px;border:1px solid var(--border3);flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;transition:all .2s}
-.ci input:checked ~ .cb{background:var(--red);border-color:var(--red)}
-.cb::after{content:'✓';font-size:9px;color:#fff;display:none}
-.ci input:checked ~ .cb::after{display:block}
-.ci-lbl{font-size:11px;color:var(--text)}
+/* ── SERVICES SECTION ── */
+#services{background:linear-gradient(to bottom,var(--bg2),var(--bg))}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:48px}
+.srv-card{background:var(--bg1);border:1px solid var(--border);padding:20px;transition:border-color .2s}
+.srv-card:hover{border-color:var(--border3)}
+.srv-icon{font-size:20px;margin-bottom:10px;color:var(--red2)}
+.srv-title{font-family:var(--head);font-size:12px;font-weight:700;color:var(--textbr);
+  letter-spacing:.08em;margin-bottom:10px}
+.srv-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.srv-list li{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.srv-list li::before{content:'';width:4px;height:4px;background:var(--red);flex-shrink:0}
 
-/* SOCIAL */
-.social-hdr{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em;
-  text-transform:uppercase;text-align:center;margin-bottom:12px;position:relative}
-.social-hdr::before,.social-hdr::after{content:'';position:absolute;top:50%;width:33%;height:1px;background:var(--border)}
-.social-hdr::before{left:0}.social-hdr::after{right:0}
-.sbtns{display:flex;flex-direction:column;gap:7px}
-.sbtn{display:flex;align-items:center;gap:11px;padding:11px 14px;
-  border:1px solid var(--border2);background:var(--bg);color:var(--text);
-  cursor:pointer;font-family:var(--body);font-size:13px;font-weight:500;
-  width:100%;transition:all .2s}
-.sbtn:hover{border-color:var(--border3);background:var(--bg2);color:var(--textbr)}
-.sbtn svg{width:18px;height:18px;flex-shrink:0}
-.sbtn .arr{margin-left:auto;color:var(--dim);font-size:11px;transition:color .2s}
-.sbtn:hover .arr{color:var(--red2)}
-.or{display:flex;align-items:center;gap:10px;margin:16px 0;
-  font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.15em}
-.or::before,.or::after{content:'';flex:1;height:1px;background:var(--border)}
+.lang-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:48px}
+.lang-chip{padding:6px 16px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;border:1px solid var(--border)}
+.lang-chip.core{border-color:var(--red);color:var(--red2);background:rgba(176,32,32,.08)}
+.lang-chip.ext{border-color:var(--border2);color:var(--muted)}
 
-/* ACTIONS */
-.acts{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
-.vb{padding:10px 22px;font-family:var(--head);font-size:9px;font-weight:700;
-  letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border:none;
-  display:flex;align-items:center;gap:6px;transition:all .2s;white-space:nowrap}
-.vb.sol{background:var(--red);color:#fff;clip-path:polygon(7px 0%,100% 0%,calc(100% - 7px) 100%,0% 100%)}
-.vb.sol:hover{background:var(--red2)}
-.vb.sol:disabled{background:var(--dim);cursor:not-allowed}
-.vb.gh{background:transparent;border:1px solid var(--border2);color:var(--muted)}
-.vb.gh:hover{border-color:var(--border3);color:var(--textbr)}
-.vb.fw{width:100%;justify-content:center}
+.recruit-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.recruit-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.15em;margin-right:6px}
+.recruit-ch{display:flex;align-items:center;gap:6px;padding:6px 14px;
+  border:1px solid var(--border2);background:var(--bg1);color:var(--muted);
+  font-size:11px;font-weight:500;transition:all .2s;text-decoration:none}
+.recruit-ch:hover{border-color:var(--red);color:var(--textbr);background:var(--bg2)}
 
-/* LOADER */
-.loader{display:none;position:absolute;inset:0;background:rgba(4,0,0,.88);
-  align-items:center;justify-content:center;z-index:10;flex-direction:column;gap:10px}
-.loader.on{display:flex}
-.spin{width:30px;height:30px;border:2px solid var(--border2);border-top-color:var(--red);
-  border-radius:50%;animation:sp .7s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-.ltxt{font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.15em}
+/* ── RESOURCES SECTION ── */
+#resources{background:var(--bg1)}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.res-card{background:var(--bg);border:1px solid var(--border);padding:20px;border-left:3px solid var(--red)}
+.res-tag{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px}
+.res-title{font-size:14px;font-weight:600;color:var(--textbr);margin-bottom:6px;line-height:1.3}
+.res-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.res-link{font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.1em;
+  text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.res-link:hover{color:var(--red2)}
 
-/* SUCCESS */
-.success{display:none;text-align:center;padding:20px 0}
-.success.on{display:block}
-.s-icon{width:52px;height:52px;border:2px solid var(--green);margin:0 auto 14px;
-  display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green)}
-.s-title{font-family:var(--head);font-size:15px;color:var(--textbr);letter-spacing:.08em;margin-bottom:6px}
-.s-id{font-family:var(--mono);font-size:20px;color:var(--red2);margin:10px 0;letter-spacing:.1em}
-.s-desc{font-size:13px;color:var(--muted);line-height:1.7}
-.code-block{background:var(--bg2);border:1px solid var(--border);padding:14px;margin-top:16px;
-  font-family:var(--mono);font-size:10px;color:var(--muted);line-height:2;text-align:left}
-.k{color:var(--red2)}.v{color:var(--green)}.c{color:var(--dim)}
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;background:var(--bg1);border-top:1px solid var(--border2);padding:40px}
+.footer-inner{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px;flex-wrap:wrap}
+.footer-brand .logo-name{font-size:14px;margin-bottom:4px}
+.footer-brand p{font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px;max-width:200px}
+.footer-col-title{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:12px}
+.footer-links{display:flex;flex-direction:column;gap:7px}
+.footer-link{font-size:12px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-link:hover{color:var(--textbr)}
+.footer-bottom{padding-top:20px;border-top:1px solid var(--border);display:flex;
+  align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-copy{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em}
+.footer-email{font-family:var(--mono);font-size:9px;color:var(--muted);text-decoration:none}
+.footer-email:hover{color:var(--red2)}
 
-/* PREVIEW */
-.preview{background:var(--bg2);border:1px solid var(--border);padding:14px;margin-bottom:14px;
-  font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.9;max-height:240px;overflow-y:auto}
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(4,0,0,.9);align-items:center;justify-content:center;padding:20px}
+.modal-overlay.on{display:flex}
+.modal{background:var(--bg1);border:1px solid var(--border2);border-top:2px solid var(--red);
+  width:100%;max-width:560px;padding:28px;position:relative;animation:modalIn .2s ease;max-height:90vh;overflow-y:auto}
+@keyframes modalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;
+  color:var(--muted);cursor:pointer;font-size:18px}
+.modal-close:hover{color:var(--red2)}
+.modal-title{font-family:var(--head);font-size:14px;color:var(--textbr);letter-spacing:.08em;margin-bottom:4px}
+.modal-sub{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:20px}
+.modal-salary{font-family:var(--mono);font-size:18px;color:var(--red2);margin-bottom:16px}
+.modal-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.modal-section{margin-bottom:16px}
+.modal-section-title{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.modal-section-title::before{content:'// '}
+.modal-body{font-size:12px;color:var(--muted);line-height:1.7}
+.modal-apply{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;
+  background:var(--red);color:#fff;border:none;cursor:pointer;width:100%;
+  font-family:var(--head);font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  margin-top:20px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+  text-decoration:none;transition:background .2s}
+.modal-apply:hover{background:var(--red2)}
 
-.ln{font-size:11px;color:var(--dim);text-align:center;margin-top:14px;font-family:var(--mono);line-height:1.7}
-.ln a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border2)}
-.ln a:hover{color:var(--red2)}
-
-@media(max-width:680px){
-  .row2{grid-template-columns:1fr}
-  .cgrid{grid-template-columns:1fr}
-  .page{padding:28px 14px 48px;gap:28px}
-  .left{width:100%}
-  .card{padding:18px}
+@media(max-width:960px){
+  .nav{padding:0 20px}
+  .nav-links{display:none;flex-direction:column;position:absolute;top:60px;left:0;right:0;
+    background:rgba(4,0,0,.98);border-bottom:1px solid var(--border2);padding:8px 0}
+  .nav-links.open{display:flex}
+  .nav-link{height:44px;padding:0 20px;width:100%;border-bottom:1px solid var(--border)}
+  .nav-toggle{display:flex}
+  section{padding:60px 20px}
+  .footer-inner{grid-template-columns:1fr 1fr}
+  .hero{padding:90px 20px 60px}
+}
+@media(max-width:600px){
+  .hero-stats{flex-wrap:wrap}
+  .hstat{min-width:50%;border-bottom:1px solid var(--border)}
+  .footer-inner{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div class="pgrid"></div>
 
-<nav class="nav">
-  <a href="https://vbg-dashboard.vercel.app" class="nav-logo">
+<!-- NAV -->
+<nav class="nav" id="navbar">
+  <a href="#" class="nav-logo">
     <div class="logo-hex"><span>VB</span></div>
-    <div><div class="logo-name">VocalBridge</div><div class="logo-sub">// GLOBAL</div></div>
+    <div class="logo-wm">
+      <span class="logo-name">VocalBridge</span>
+      <span class="logo-sub">// GLOBAL</span>
+    </div>
   </a>
-  <a href="https://vbg-dashboard.vercel.app" class="nav-back">&#8592; Volver al inicio</a>
+  <div class="nav-links" id="nav-links">
+    <a href="#hero" class="nav-link active" onclick="setActive(this)">Home</a>
+    <a href="#opportunities" class="nav-link" onclick="setActive(this)">Opportunities</a>
+    <a href="#academy" class="nav-link" onclick="setActive(this)">Academy</a>
+    <a href="#services" class="nav-link" onclick="setActive(this)">Services</a>
+    <a href="#resources" class="nav-link" onclick="setActive(this)">Resources</a>
+    <a href="#services" class="nav-link" onclick="setActive(this)">About Us</a>
+  </div>
+  <div class="nav-sp"></div>
+  <div class="nav-actions">
+    <div class="nav-drop">
+      <button class="btn-join">&#9670; Join Now</button>
+      <div class="drop-menu">
+        <div class="drop-lbl">// únete a la plataforma</div>
+        <a href="https://t.me/vocalbridge" target="_blank" class="drop-item">✈ Canal de Telegram <span class="drop-badge">nuevo</span></a>
+        <a href="auth.html" class="drop-item">&#9651; Formulario de Registro</a>
+        <a href="auth.html" class="drop-item">&#9670; Envío de Perfil de Voz</a>
+      </div>
+    </div>
+    <div class="nav-drop">
+      <button class="btn-login">&#9633; Login</button>
+      <div class="drop-menu">
+        <div class="drop-lbl">// acceso de miembros</div>
+        <a href="#" class="drop-item">&#9650; Vercel Dashboard</a>
+        <div class="drop-sep"></div>
+        <a href="dashboard.html" class="drop-item">&#9632; Sala de Tareas <span class="drop-badge">beta</span></a>
+        <a href="#" class="drop-item">&#9671; Centro de Miembros</a>
+      </div>
+    </div>
+    <button class="nav-toggle" onclick="toggleMobile()" aria-label="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
-<div class="page">
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="hero-orb"></div>
+  <div class="scan-hero"></div>
+  <div class="hero-corner tl"></div><div class="hero-corner tr"></div>
+  <div class="hero-corner bl"></div><div class="hero-corner br"></div>
+  <div class="hero-eye">Ecosistema Lingüístico Global</div>
+  <h1 class="hero-h1">Vocal<span class="ac">Bridge</span><br>Global</h1>
+  <div class="hero-h2">// Conectando voces · Creando oportunidades</div>
+  <p class="hero-desc">Plataforma de colaboración para talento lingüístico. Impulsando la comunicación global con tecnología e inteligencia de matching.</p>
+  <div class="hero-acts">
+    <a href="auth.html" class="hbtn-join">&#9670; Únete como Talento</a>
+    <a href="#opportunities" class="hbtn-sec">&#9632; Ver Oportunidades</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><span class="hstat-n" id="c1">0</span><span class="hstat-l">Talentos registrados</span></div>
+    <div class="hstat"><span class="hstat-n" id="c2">0</span><span class="hstat-l">Vacantes activas</span></div>
+    <div class="hstat"><span class="hstat-n" id="c3">0<span style="font-size:13px">%</span></span><span class="hstat-l">Tasa de matching</span></div>
+    <div class="hstat"><span class="hstat-n" id="c4">0</span><span class="hstat-l">Países conectados</span></div>
+  </div>
+</section>
+<div class="scan-bar"></div>
 
-  <!-- LEFT -->
-  <div class="left">
-    <div class="eyebrow">Plataforma de talentos</div>
-    <h1 class="big-title">Únete a la<br>red vocal <span class="a">global</span></h1>
-    <p class="desc">Conectamos voces profesionales con oportunidades de narración, doblaje y locución en todo el mundo.</p>
-    <div class="feats">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Matching inteligente</strong>Tareas compatibles con tu perfil al 40%+</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Panel operacional</strong>Visualiza estado, órdenes y métricas en tiempo real</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Red global</strong>Clientes en 38+ países</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-body"><strong>Notificaciones inmediatas</strong>Alertas de nuevas tareas por email</div></div>
+<!-- OPPORTUNITIES -->
+<section id="opportunities">
+  <div class="sec-eyebrow">Oportunidades globales</div>
+  <h2 class="sec-title">67 Vacantes Activas</h2>
+  <p class="sec-desc">Explora oportunidades de talento de voz y trabajo remoto en 13+ mercados lingüísticos.</p>
+  <div class="opp-filters">
+    <button class="opp-filter on" onclick="filterOpp(this,'all')">Todos (23)</button>
+    <button class="opp-filter" onclick="filterOpp(this,'comercial')">Grabación Comercial</button>
+    <button class="opp-filter" onclick="filterOpp(this,'videojuegos')">Doblaje Videojuegos</button>
+    <button class="opp-filter" onclick="filterOpp(this,'narracion')">Narración</button>
+    <button class="opp-filter" onclick="filterOpp(this,'ia')">IA</button>
+    <button class="opp-filter" onclick="filterOpp(this,'ivr')">IVR</button>
+    <button class="opp-filter" onclick="filterOpp(this,'educacion')">Educación</button>
+    <button class="opp-filter" onclick="filterOpp(this,'animacion')">Animación</button>
+  </div>
+  <div class="opp-grid" id="opp-grid"></div>
+  <div class="opp-more"><button class="opp-more-btn" onclick="loadMoreOpp()">// cargar más vacantes</button></div>
+</section>
+<div class="scan-bar"></div>
+
+<!-- ACADEMY -->
+<section id="academy">
+  <div class="sec-eyebrow">Programa de crecimiento vocal</div>
+  <h2 class="sec-title">VocalBridge Academy</h2>
+  <p class="sec-desc">Ruta de 12 meses diseñada para llevarte de principiante a profesional élite. Sistema de niveles por puntos con incentivos reales.</p>
+
+  <div class="academy-phases">
+    <div class="phase-card starter">
+      <div class="phase-badge">Fase 1 — Starter</div>
+      <div class="phase-title">Plan de Despegue</div>
+      <div class="phase-period">Mes 1–3</div>
+      <div class="phase-rows">
+        <div class="phase-row"><span class="ph-k">Público</span><span class="ph-v">Principiantes</span></div>
+        <div class="phase-row"><span class="ph-k">Ingreso</span><span class="ph-v inc">$0–200/mes</span></div>
+        <div class="phase-row"><span class="ph-k">Comisión</span><span class="ph-v">0% primer encargo</span></div>
+        <div class="phase-row"><span class="ph-k">Puntos</span><span class="ph-v">0 → 100 pts</span></div>
+      </div>
     </div>
-    <div class="scan-line"></div>
-    <div class="mini-stats">
-      <div class="ms"><div class="ms-n">1,240+</div><div class="ms-l">Talentos</div></div>
-      <div class="ms"><div class="ms-n">67</div><div class="ms-l">Vacantes</div></div>
-      <div class="ms"><div class="ms-n">38</div><div class="ms-l">Países</div></div>
-      <div class="ms"><div class="ms-n">84%</div><div class="ms-l">Match rate</div></div>
+    <div class="phase-card growth">
+      <div class="phase-badge">Fase 2 — Growth ★</div>
+      <div class="phase-title">Plan de Crecimiento</div>
+      <div class="phase-period">Mes 4–8 (período clave)</div>
+      <div class="phase-rows">
+        <div class="phase-row"><span class="ph-k">Público</span><span class="ph-v">Con experiencia</span></div>
+        <div class="phase-row"><span class="ph-k">Ingreso</span><span class="ph-v inc">$200–800/mes</span></div>
+        <div class="phase-row"><span class="ph-k">Comisión</span><span class="ph-v">Proporción estándar</span></div>
+        <div class="phase-row"><span class="ph-k">Puntos</span><span class="ph-v">100 → 500 pts</span></div>
+      </div>
+    </div>
+    <div class="phase-card elite">
+      <div class="phase-badge">Fase 3 — Elite</div>
+      <div class="phase-title">Plan Élite</div>
+      <div class="phase-period">Mes 9–12+</div>
+      <div class="phase-rows">
+        <div class="phase-row"><span class="ph-k">Público</span><span class="ph-v">Talento profesional</span></div>
+        <div class="phase-row"><span class="ph-k">Ingreso</span><span class="ph-v inc">$800–3,000+/mes</span></div>
+        <div class="phase-row"><span class="ph-k">Comisión</span><span class="ph-v">Acuerdo preferencial</span></div>
+        <div class="phase-row"><span class="ph-k">Puntos</span><span class="ph-v">1,000 → 3,000 pts</span></div>
+      </div>
     </div>
   </div>
 
-  <!-- CARD -->
-  <div class="card">
-    <div class="loader" id="loader"><div class="spin"></div><div class="ltxt">enviando registro...</div></div>
-    <div class="card-scan"></div>
+  <div class="sec-eyebrow" style="margin-bottom:20px">Sistema de niveles</div>
+  <div class="levels-grid">
+    <div class="level-card bronze"><div class="level-icon">BR</div><div class="level-body"><div class="level-name">Bronze</div><div class="level-pts">100 pts · Mes 1</div><div class="level-perks">Prioridad en asignación · Acceso a recursos comunitarios</div></div></div>
+    <div class="level-card silver"><div class="level-icon">SV</div><div class="level-body"><div class="level-name">Silver</div><div class="level-pts">500 pts · Mes 3–4</div><div class="level-perks">Pool de tareas alto valor · Calificación talento destacado</div></div></div>
+    <div class="level-card gold"><div class="level-icon">GO</div><div class="level-body"><div class="level-name">Gold</div><div class="level-pts">1,000 pts · Mes 6–8</div><div class="level-perks">Proyectos VIP prioritarios · Soporte de crecimiento exclusivo</div></div></div>
+    <div class="level-card elite"><div class="level-icon">EL</div><div class="level-body"><div class="level-name">Elite</div><div class="level-pts">3,000 pts · Mes 10–12</div><div class="level-perks">Contrato estratégico largo plazo · Voz IA licensing</div></div></div>
+  </div>
 
-    <div class="tabs">
-      <button class="tab on" id="t-reg" onclick="mode('reg')">&#9670; Registro</button>
-      <button class="tab" id="t-log" onclick="mode('log')">&#9633; Iniciar sesión</button>
+  <div class="sec-eyebrow" style="margin-bottom:20px">Hitos de ejecución</div>
+  <div class="milestones">
+    <div class="milestone"><div class="ms-left"><div class="ms-phase-tag starter">Starter</div><div class="ms-time">Semana 1</div></div><div class="ms-dot"></div><div class="ms-body"><div class="ms-title">Registro · Perfil · Primer Encargo sin Comisión</div><div class="ms-desc">Registro en base de talento → Organizar portafolio → Aceptar recomendación de tareas → Completar primer encargo (0% comisión).</div></div></div>
+    <div class="milestone"><div class="ms-left"><div class="ms-phase-tag starter">Starter</div><div class="ms-time">Mes 1</div></div><div class="ms-dot"></div><div class="ms-body"><div class="ms-title">Completar 3 Proyectos · Acumular Puntos Bronze</div><div class="ms-desc">Formación básica → Completar al menos 3 proyectos → Alcanzar 100 pts Bronze → Dominar normas de colaboración remota.</div></div></div>
+    <div class="milestone"><div class="ms-left"><div class="ms-phase-tag growth">Growth</div><div class="ms-time">Mes 3–4</div></div><div class="ms-dot"></div><div class="ms-body"><div class="ms-title">Asignación Inteligente · Desbloqueo Silver</div><div class="ms-desc">Matching inteligente por tags de capacidad → Formación internacional → 500 pts desbloquean pool de alto valor.</div></div></div>
+    <div class="milestone"><div class="ms-left"><div class="ms-phase-tag growth">Growth</div><div class="ms-time">Mes 6</div></div><div class="ms-dot"></div><div class="ms-body"><div class="ms-title">Relaciones Internacionales · Ingreso Estable $400+</div><div class="ms-desc">2+ proyectos con clientes internacionales → Relaciones de recompra → Calificación talento destacado.</div></div></div>
+    <div class="milestone"><div class="ms-left"><div class="ms-phase-tag elite">Elite</div><div class="ms-time">Mes 8</div></div><div class="ms-dot"></div><div class="ms-body"><div class="ms-title">Certificación Gold · Proyectos de Publicidad</div><div class="ms-desc">1,000 pts Gold → Proyectos VIP de alto valor → Apertura para publicidad de marca y videojuegos AAA.</div></div></div>
+    <div class="milestone"><div class="ms-left"><div class="ms-phase-tag elite">Elite</div><div class="ms-time">Mes 12</div></div><div class="ms-dot"></div><div class="ms-body"><div class="ms-title">Certificación Elite · Contrato Estratégico</div><div class="ms-desc">3,000 pts → Contrato largo plazo → Acceso a recursos clave → Certificación voz IA licensing.</div></div></div>
+  </div>
+</section>
+<div class="scan-bar"></div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="sec-eyebrow">Service Areas & Coverage</div>
+  <h2 class="sec-title">Global Project Resource Network</h2>
+  <p class="sec-desc">Covering six major service verticals across 13+ language markets, integrating requirements from multiple industries into a continuous flow of opportunities.</p>
+  <div class="services-grid">
+    <div class="srv-card"><div class="srv-icon">📢</div><div class="srv-title">Commercial Content</div><ul class="srv-list"><li>Brand voice-overs</li><li>Corporate videos</li><li>Product presentations</li><li>Radio & digital advertising</li></ul></div>
+    <div class="srv-card"><div class="srv-icon">📱</div><div class="srv-title">Social Media</div><ul class="srv-list"><li>TikTok content production</li><li>YouTube narration</li><li>Instagram short-form</li><li>Podcast production</li></ul></div>
+    <div class="srv-card"><div class="srv-icon">🎮</div><div class="srv-title">Entertainment</div><ul class="srv-list"><li>Video game voice acting</li><li>Animation dubbing</li><li>Audiobook production</li><li>Film dubbing & post-production</li></ul></div>
+    <div class="srv-card"><div class="srv-icon">🤖</div><div class="srv-title">AI Industry</div><ul class="srv-list"><li>AI voice training</li><li>Voice data collection & labeling</li><li>TTS model training</li><li>Voice data licensing</li></ul></div>
+    <div class="srv-card"><div class="srv-icon">🌐</div><div class="srv-title">Global Localization</div><ul class="srv-list"><li>Translation & proofreading</li><li>Multilingual dubbing</li><li>Cultural adaptation</li><li>International campaign production</li></ul></div>
+    <div class="srv-card"><div class="srv-icon">⛓️</div><div class="srv-title">Web3 & Digital</div><ul class="srv-list"><li>Promotional content production</li><li>Multilingual community management</li><li>Metaverse voice environments</li><li>International expansion campaigns</li></ul></div>
+  </div>
+
+  <div class="sec-eyebrow" style="margin-bottom:16px">Global Language Network</div>
+  <div class="lang-grid">
+    <div class="lang-chip core">Español</div><div class="lang-chip core">English</div>
+    <div class="lang-chip core">中文</div><div class="lang-chip core">Português</div>
+    <div class="lang-chip core">日本語</div><div class="lang-chip core">한국어</div>
+    <div class="lang-chip ext">Français</div><div class="lang-chip ext">Deutsch</div>
+    <div class="lang-chip ext">العربية</div><div class="lang-chip ext">Русский</div>
+    <div class="lang-chip ext">हिन्दी</div><div class="lang-chip ext">Italiano</div>
+    <div class="lang-chip ext">+más</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+    <span style="font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.15em">Core 6</span>
+    <span style="font-size:9px;color:var(--muted)">·</span>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.15em">Expanding 7+</span>
+  </div>
+
+  <div class="sec-eyebrow" style="margin:32px 0 16px">Recruitment Channels</div>
+  <div class="recruit-row">
+    <span class="recruit-title">// canales activos</span>
+    <a href="https://tiktok.com" target="_blank" class="recruit-ch">🎵 TikTok</a>
+    <a href="https://facebook.com" target="_blank" class="recruit-ch">📘 Facebook</a>
+    <a href="https://wa.me" target="_blank" class="recruit-ch">💬 WhatsApp</a>
+    <a href="https://t.me/vocalbridge" target="_blank" class="recruit-ch">✈ Telegram</a>
+    <a href="https://discord.com" target="_blank" class="recruit-ch">🎮 Discord</a>
+    <a href="https://linkedin.com" target="_blank" class="recruit-ch">💼 LinkedIn</a>
+    <a href="https://youtube.com" target="_blank" class="recruit-ch">▶ YouTube</a>
+  </div>
+</section>
+<div class="scan-bar"></div>
+
+<!-- RESOURCES -->
+<section id="resources">
+  <div class="sec-eyebrow">Recursos y herramientas</div>
+  <h2 class="sec-title">Centro de Recursos</h2>
+  <p class="sec-desc">Guías, herramientas y materiales para impulsar tu carrera en el ecosistema VocalBridge.</p>
+  <div class="res-grid">
+    <div class="res-card"><div class="res-tag">Guía · Inicio rápido</div><div class="res-title">Cómo completar tu primer encargo en 7 días</div><div class="res-desc">Pasos detallados para registrarte, crear tu perfil y recibir tu primera asignación con 0% de comisión.</div><a href="auth.html" class="res-link">Comenzar ahora →</a></div>
+    <div class="res-card"><div class="res-tag">Herramienta · Matching</div><div class="res-title">Sistema de Matching Inteligente</div><div class="res-desc">Ingresa tu ID de talento para ver las tareas compatibles con tu perfil. Umbral de 40% de coincidencia.</div><a href="dashboard.html" class="res-link">Acceder al panel →</a></div>
+    <div class="res-card"><div class="res-tag">Academia · Video</div><div class="res-title">Formación en Grabación Profesional</div><div class="res-desc">Aprende estándares de grabación, configuración de home studio y normas de entrega para clientes internacionales.</div><a href="#academy" class="res-link">Ver programa →</a></div>
+    <div class="res-card"><div class="res-tag">Mercado · Datos</div><div class="res-title">Análisis Comparativo de Plataformas</div><div class="res-desc">VocalBridge vs Fiverr, Upwork, Voices.com — datos de tasa de conversión, retención y porcentaje neto real.</div><a href="#academy" class="res-link">Ver análisis →</a></div>
+    <div class="res-card"><div class="res-tag">Comunidad · Telegram</div><div class="res-title">Canal Oficial de Oportunidades</div><div class="res-desc">Recibe notificaciones de nuevas vacantes, actualizaciones del programa y noticias del ecosistema VocalBridge.</div><a href="https://t.me/vocalbridge" target="_blank" class="res-link">Unirse al canal →</a></div>
+    <div class="res-card"><div class="res-tag">Soporte · Email</div><div class="res-title">Centro de Ayuda y Soporte</div><div class="res-desc">¿Tienes preguntas sobre el programa, pagos o matching? Nuestro equipo responde en 24-48 horas.</div><a href="mailto:support@vocalbridge.space" class="res-link">Contactar soporte →</a></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:0">
+        <div class="logo-hex"><span>VB</span></div>
+        <div class="logo-wm"><span class="logo-name">VocalBridge</span><span class="logo-sub">// GLOBAL</span></div>
+      </div>
+      <p>Ecosistema de colaboración para talento lingüístico. Conectando voces. Creando oportunidades.</p>
     </div>
-
-    <!-- REGISTER -->
-    <div id="m-reg">
-      <div class="stepbar">
-        <div class="st on" id="s1"><span class="sn">01</span>Básico</div>
-        <div class="st" id="s2"><span class="sn">02</span>Profesional</div>
-        <div class="st" id="s3"><span class="sn">03</span>Portfolio</div>
-        <div class="st" id="s4"><span class="sn">04</span>Confirmar</div>
-      </div>
-      <div class="progress"><div class="pfill" id="pf" style="width:25%"></div></div>
-
-      <!-- SUCCESS -->
-      <div class="success" id="done">
-        <div class="s-icon">✓</div>
-        <div class="s-title">¡Registro enviado!</div>
-        <div class="s-id" id="done-id">VBG-XXXXXX</div>
-        <div class="s-desc">Notificación enviada a <strong style="color:var(--red2)">support@vocalbridge.space</strong><br>Recibirás confirmación en 24–48 horas.<br>Guarda tu ID para el sistema de matching.</div>
-        <div class="code-block" id="done-data"></div>
-      </div>
-
-      <!-- STEP 1 -->
-      <div class="pnl on" id="p1">
-        <div class="sec">Información básica</div>
-        <div class="row2">
-          <div class="fg"><div class="lbl">Nombre <span class="r">*</span></div><input class="inp" id="fn" placeholder="Tu nombre"><div class="ferr" id="efn">Requerido</div></div>
-          <div class="fg"><div class="lbl">Apellido <span class="r">*</span></div><input class="inp" id="fl" placeholder="Tu apellido"><div class="ferr" id="efl">Requerido</div></div>
-        </div>
-        <div class="row1"><div class="fg"><div class="lbl">Email <span class="r">*</span></div><input class="inp" id="fe" type="email" placeholder="tu@email.com"><div class="ferr" id="efe">Email inválido</div></div></div>
-        <div class="row2">
-          <div class="fg">
-            <div class="lbl">País <span class="r">*</span></div>
-            <select class="inp" id="fc">
-              <option value="">Seleccionar...</option>
-              <option>México</option><option>España</option><option>Argentina</option><option>Colombia</option><option>Chile</option><option>Perú</option><option>Venezuela</option><option>Ecuador</option><option>Bolivia</option><option>Guatemala</option><option>Cuba</option><option>Honduras</option><option>El Salvador</option><option>Nicaragua</option><option>Costa Rica</option><option>Panamá</option><option>Uruguay</option><option>Paraguay</option><option>República Dominicana</option><option>Puerto Rico</option><option>Estados Unidos</option><option>Brasil</option><option>China</option><option>Japón</option><option>Otro</option>
-            </select>
-            <div class="ferr" id="efc">Selecciona país</div>
-          </div>
-          <div class="fg">
-            <div class="lbl">Idioma nativo <span class="r">*</span></div>
-            <select class="inp" id="fla">
-              <option value="">Seleccionar...</option>
-              <option>Español (neutro)</option><option>Español (México)</option><option>Español (España)</option><option>Español (Argentina)</option><option>Español (Colombia)</option><option>Inglés</option><option>Portugués</option><option>Chino mandarín</option><option>Japonés</option><option>Francés</option><option>Otro</option>
-            </select>
-            <div class="ferr" id="efla">Selecciona idioma</div>
-          </div>
-        </div>
-        <div class="row1"><div class="fg"><div class="lbl">Telegram / WhatsApp</div><input class="inp" id="ftg" placeholder="@usuario o +52 1234567890"></div></div>
-        <div class="acts"><button class="vb sol" onclick="next(1)">Siguiente &#8594;</button></div>
-      </div>
-
-      <!-- STEP 2 -->
-      <div class="pnl" id="p2">
-        <div class="sec">Perfil profesional</div>
-        <div class="lbl" style="margin-bottom:7px">Estilos de voz <span class="r">*</span></div>
-        <div class="cgrid" id="sg">
-          <label class="ci"><input type="checkbox" value="Narración"><div class="cb"></div><span class="ci-lbl">Narración</span></label>
-          <label class="ci"><input type="checkbox" value="Doblaje"><div class="cb"></div><span class="ci-lbl">Doblaje</span></label>
-          <label class="ci"><input type="checkbox" value="Voz en off"><div class="cb"></div><span class="ci-lbl">Voz en off</span></label>
-          <label class="ci"><input type="checkbox" value="Locución comercial"><div class="cb"></div><span class="ci-lbl">Loc. comercial</span></label>
-          <label class="ci"><input type="checkbox" value="E-learning"><div class="cb"></div><span class="ci-lbl">E-learning</span></label>
-          <label class="ci"><input type="checkbox" value="Animación"><div class="cb"></div><span class="ci-lbl">Animación</span></label>
-          <label class="ci"><input type="checkbox" value="Voz corporativa"><div class="cb"></div><span class="ci-lbl">Voz corporativa</span></label>
-          <label class="ci"><input type="checkbox" value="IVR / Asistente"><div class="cb"></div><span class="ci-lbl">IVR / Asistente</span></label>
-          <label class="ci"><input type="checkbox" value="Audiolibros"><div class="cb"></div><span class="ci-lbl">Audiolibros</span></label>
-          <label class="ci"><input type="checkbox" value="Videojuegos"><div class="cb"></div><span class="ci-lbl">Videojuegos</span></label>
-        </div>
-        <div class="ferr" id="est">Selecciona al menos 1</div>
-        <div class="row2" style="margin-top:12px">
-          <div class="fg">
-            <div class="lbl">Experiencia <span class="r">*</span></div>
-            <select class="inp" id="fex">
-              <option value="">Seleccionar...</option>
-              <option>Menos de 1 año</option><option>1–2 años</option><option>3–5 años</option><option>6–10 años</option><option>Más de 10 años</option>
-            </select>
-            <div class="ferr" id="efex">Requerido</div>
-          </div>
-          <div class="fg">
-            <div class="lbl">Modalidad <span class="r">*</span></div>
-            <select class="inp" id="fmo">
-              <option value="">Seleccionar...</option>
-              <option>Solo remoto</option><option>Solo presencial</option><option>Ambas</option>
-            </select>
-            <div class="ferr" id="efmo">Requerido</div>
-          </div>
-        </div>
-        <div class="row2">
-          <div class="fg">
-            <div class="lbl">Equipo de grabación</div>
-            <select class="inp" id="feq">
-              <option value="">Seleccionar...</option>
-              <option>Estudio profesional</option><option>Home studio</option><option>Micrófono básico</option><option>Sin equipo propio</option>
-            </select>
-          </div>
-          <div class="fg"><div class="lbl">Tarifa base (USD/hr)</div><input class="inp" id="fra" placeholder="ej: 25" type="number" min="0"></div>
-        </div>
-        <div class="row1"><div class="fg"><div class="lbl">Bio profesional</div><textarea class="inp" id="fbi" placeholder="Describe brevemente tu experiencia... (máx. 300 caracteres)" maxlength="300"></textarea></div></div>
-        <div class="acts">
-          <button class="vb gh" onclick="prev(2)">&#8592; Atrás</button>
-          <button class="vb sol" onclick="next(2)">Siguiente &#8594;</button>
-        </div>
-      </div>
-
-      <!-- STEP 3 -->
-      <div class="pnl" id="p3">
-        <div class="sec">Portfolio y presencia digital</div>
-        <div class="row1"><div class="fg"><div class="lbl">Demo / muestra de voz <span class="r">*</span></div><input class="inp" id="fdm" placeholder="https://soundcloud.com/tu-demo · Drive · YouTube..."><div class="ferr" id="efdm">Agrega al menos 1 link</div></div></div>
-        <div class="row1"><div class="fg"><div class="lbl">Portfolio / Sitio web</div><input class="inp" id="fpo" placeholder="https://tuportfolio.com"></div></div>
-        <div class="row2">
-          <div class="fg"><div class="lbl">Casting Call Club / Voice123</div><input class="inp" id="fcc" placeholder="URL de tu perfil"></div>
-          <div class="fg"><div class="lbl">Fiverr / Upwork</div><input class="inp" id="ffv" placeholder="URL de tu perfil"></div>
-        </div>
-        <div class="row2">
-          <div class="fg"><div class="lbl">Instagram</div><input class="inp" id="fig" placeholder="@usuario"></div>
-          <div class="fg"><div class="lbl">LinkedIn</div><input class="inp" id="fli" placeholder="URL perfil"></div>
-        </div>
-        <div class="row1"><div class="fg"><div class="lbl">YouTube</div><input class="inp" id="fyt" placeholder="https://youtube.com/@tucanal"></div></div>
-        <div class="row2">
-          <div class="fg">
-            <div class="lbl">¿Cómo encontraste VocalBridge?</div>
-            <select class="inp" id="fsr">
-              <option value="">Seleccionar...</option>
-              <option>Telegram</option><option>Instagram</option><option>Recomendación</option><option>Google</option><option>LinkedIn</option><option>Otro</option>
-            </select>
-          </div>
-        </div>
-        <div class="row1"><div class="fg"><div class="lbl">Comentarios adicionales</div><textarea class="inp" id="fco" placeholder="Algo más que quieras compartir..." style="min-height:56px"></textarea></div></div>
-        <div class="acts">
-          <button class="vb gh" onclick="prev(3)">&#8592; Atrás</button>
-          <button class="vb sol" onclick="next(3)">Revisar &#8594;</button>
-        </div>
-      </div>
-
-      <!-- STEP 4 -->
-      <div class="pnl" id="p4">
-        <div class="sec">Revisar y confirmar</div>
-        <div class="preview" id="preview"></div>
-        <label class="ci" style="margin-bottom:4px">
-          <input type="checkbox" id="ftr">
-          <div class="cb"></div>
-          <span class="ci-lbl" style="font-size:11px;color:var(--muted)">Acepto los términos de uso y política de privacidad de VocalBridge Global</span>
-        </label>
-        <div class="ferr" id="etr" style="margin-bottom:10px">Debes aceptar los términos</div>
-        <div class="acts">
-          <button class="vb gh" onclick="prev(4)">&#8592; Editar</button>
-          <button class="vb sol" onclick="submit()" id="sub-btn">&#9670; Enviar registro</button>
-        </div>
+    <div>
+      <div class="footer-col-title">Plataforma</div>
+      <div class="footer-links">
+        <a href="#opportunities" class="footer-link">Oportunidades</a>
+        <a href="#academy" class="footer-link">Academy</a>
+        <a href="#services" class="footer-link">Servicios</a>
+        <a href="dashboard.html" class="footer-link">Panel Operacional</a>
       </div>
     </div>
-
-    <!-- LOGIN -->
-    <div id="m-log" style="display:none">
-      <div style="text-align:center;margin-bottom:24px">
-        <div style="font-family:var(--head);font-size:16px;font-weight:700;color:var(--textbr);letter-spacing:.08em;margin-bottom:5px">Acceso a plataforma</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:.15em">// autenticación segura</div>
-      </div>
-      <div class="social-hdr">continuar con</div>
-      <div class="sbtns">
-        <button class="sbtn" onclick="socialLogin('Google')">
-          <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-          Continuar con Google <span class="arr">&#8594;</span>
-        </button>
-        <button class="sbtn" onclick="socialLogin('Telegram')">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2CA5E0"/><path d="M5.5 11.9l2.9 1.1 1.1 3.5c.1.3.5.4.7.2l1.6-1.3 3.1 2.3c.3.2.7.1.8-.3l2.4-9.5c.1-.4-.3-.8-.7-.6l-11.9 4.6c-.4.2-.4.8 0 1z" fill="white"/></svg>
-          Continuar con Telegram <span class="arr">&#8594;</span>
-        </button>
-        <button class="sbtn" onclick="socialLogin('Discord')">
-          <svg viewBox="0 0 24 24"><rect width="24" height="24" rx="4" fill="#5865F2"/><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0 11.3 11.3 0 0 0-.54-1.09.07.07 0 0 0-.07-.03c-1.5.26-2.93.71-4.27 1.33a.07.07 0 0 0-.02.03C3.17 8.71 2.37 12.01 2.73 15.26a.08.08 0 0 0 .03.05 16.51 16.51 0 0 0 4.95 2.49.07.07 0 0 0 .08-.03 11.72 11.72 0 0 0 1.01-1.65.07.07 0 0 0-.04-.09 10.87 10.87 0 0 1-1.55-.74.07.07 0 0 1-.01-.11c.1-.08.21-.16.31-.24a.07.07 0 0 1 .07-.01c3.25 1.48 6.77 1.48 9.98 0a.07.07 0 0 1 .07.01c.1.08.21.16.31.24a.07.07 0 0 1-.01.11c-.5.29-1.02.54-1.55.74a.07.07 0 0 0-.04.09c.3.57.64 1.12 1.01 1.65a.07.07 0 0 0 .08.03 16.44 16.44 0 0 0 4.96-2.49.08.08 0 0 0 .03-.05c.44-3.75-.73-7.01-3.1-9.9a.05.05 0 0 0-.01-.03zM8.52 13.28c-1.04 0-1.88-.95-1.88-2.12 0-1.17.83-2.12 1.88-2.12 1.06 0 1.9.96 1.88 2.12 0 1.17-.83 2.12-1.88 2.12zm6.97 0c-1.04 0-1.88-.95-1.88-2.12 0-1.17.83-2.12 1.88-2.12 1.06 0 1.9.96 1.88 2.12 0 1.17-.82 2.12-1.88 2.12z" fill="white"/></svg>
-          Continuar con Discord <span class="arr">&#8594;</span>
-        </button>
-      </div>
-      <div class="or">o acceso por ID</div>
-      <div class="row1" style="margin-bottom:10px">
-        <div class="fg"><div class="lbl">ID de registro VocalBridge</div><input class="inp" id="lid" placeholder="VBG-XXXXXX" autocomplete="off"></div>
-      </div>
-      <button class="vb sol fw" onclick="directLogin()">&#9670; Acceder al panel</button>
-      <div class="ln">
-        ¿Primera vez? <a href="#" onclick="mode('reg');return false">Crear cuenta gratis</a><br>
-        ¿Olvidaste tu ID? <a href="mailto:support@vocalbridge.space">support@vocalbridge.space</a>
+    <div>
+      <div class="footer-col-title">Comunidad</div>
+      <div class="footer-links">
+        <a href="https://t.me/vocalbridge" target="_blank" class="footer-link">Telegram</a>
+        <a href="#" class="footer-link">Discord</a>
+        <a href="#" class="footer-link">LinkedIn</a>
+        <a href="#" class="footer-link">TikTok</a>
       </div>
     </div>
+    <div>
+      <div class="footer-col-title">Soporte</div>
+      <div class="footer-links">
+        <a href="mailto:support@vocalbridge.space" class="footer-link">support@vocalbridge.space</a>
+        <a href="auth.html" class="footer-link">Registro de Talentos</a>
+        <a href="#" class="footer-link">Términos de Uso</a>
+        <a href="#" class="footer-link">Privacidad</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 VocalBridge Global · All rights reserved · VBG-OPS v2.1</span>
+    <a href="mailto:support@vocalbridge.space" class="footer-email">support@vocalbridge.space</a>
+  </div>
+</footer>
+
+<!-- JOB MODAL -->
+<div class="modal-overlay" id="job-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-content"></div>
+    <a href="auth.html" class="modal-apply">&#9670; Aplicar ahora — Registro gratuito</a>
   </div>
 </div>
 
 <script>
-/* ═══════════════════════════════════════
-   ★ EMAILJS — reemplaza los 3 valores
-   1. Regístrate en emailjs.com (gratis)
-   2. Crea un servicio de email
-   3. Crea un template con las variables
-   4. Copia las 3 claves aquí
-═══════════════════════════════════════ */
-const EJ_KEY      = 'PONy3wvtW-MxoIWvk';
-const EJ_SERVICE  = 'service_45xwmug';
-const EJ_TEMPLATE = 'template_4px9hlc';
+/* NAV */
+function toggleMobile(){document.getElementById('nav-links').classList.toggle('open')}
+function setActive(el){document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));el.classList.add('active')}
 
-emailjs.init(EJ_KEY);
+/* COUNTERS */
+function countUp(id,target,suffix=''){
+  const el=document.getElementById(id);let v=0;
+  const step=Math.ceil(target/50);
+  const t=setInterval(()=>{v=Math.min(v+step,target);el.innerHTML=v+suffix;if(v>=target){el.innerHTML=target+suffix;clearInterval(t);}},25);
+}
+setTimeout(()=>{countUp('c1',1240,'+');countUp('c2',67);countUp('c3',84,'%');countUp('c4',38,'+')},600);
 
-/* TABS */
-function mode(m){
-  document.getElementById('m-reg').style.display=m==='reg'?'block':'none';
-  document.getElementById('m-log').style.display=m==='log'?'block':'none';
-  document.getElementById('t-reg').classList.toggle('on',m==='reg');
-  document.getElementById('t-log').classList.toggle('on',m==='log');
-}
+/* JOBS DATA */
+const JOBS=[
+  {id:1,title:'Locutor/a Comercial – Campaña de Marca Global',company:'VocalBridge Global',cat:'comercial',salary:'$1,500–$3,500 USD/mes',mode:'Remoto',type:'Tiempo Completo',langs:['Español','Inglés'],time:'Hace 2 horas',desc:'Buscamos locutor/a con voz neutra y versátil para campaña de marca global. Experiencia en locución comercial requerida. Entrega en 48h.'},
+  {id:2,title:'Voz para Spot Publicitario – Producto Tecnológico',company:'SoundWave Studios',cat:'comercial',salary:'$500–$1,200 USD/mes',mode:'Remoto',type:'Medio Tiempo',langs:['Español'],time:'Hace 5 horas',desc:'Spot de 30 segundos para producto tech. Tono joven, dinámico. Home studio aceptado.'},
+  {id:3,title:'Narrador/a Comercial – Marca de Lujo',company:'LuxVox Agency',cat:'comercial',salary:'$2,000–$4,500 USD/mes',mode:'Remoto / Presencial',type:'Completo / Medio',langs:['Español','Francés'],time:'Hace 1 día',desc:'Voz elegante, cálida para marca de lujo internacional. Bilingüe ES/FR preferido.'},
+  {id:4,title:'Actor/a de Doblaje – RPG de Mundo Abierto',company:'GameVox Interactive',cat:'videojuegos',salary:'$3,000–$7,000 USD/mes',mode:'Remoto',type:'Tiempo Completo',langs:['Español','Inglés'],time:'Hace 3 horas',desc:'Proyecto RPG con 50+ personajes. Experiencia en doblaje de videojuegos requerida. Sinergia de equipo.'},
+  {id:5,title:'Voces de Personajes – Juego Móvil',company:'PixelSound Corp',cat:'videojuegos',salary:'$800–$2,000 USD/mes',mode:'Remoto',type:'Medio Tiempo',langs:['Español','Japonés'],time:'Hace 1 día',desc:'15 personajes para juego móvil casual. Voces variadas, de 8 a 45 años.'},
+  {id:6,title:'Director/a de Doblaje – Estudio AAA',company:'VoiceForge Labs',cat:'videojuegos',salary:'$4,000–$9,000 USD/mes',mode:'Presencial',type:'Tiempo Completo',langs:['Inglés'],time:'Hace 2 días',desc:'Dirigir equipo de 12 actores de voz para título AAA. Experiencia directoral requerida.'},
+  {id:7,title:'Narrador/a de Audiolibros – Ficción Literaria',company:'AudioNarr Publishing',cat:'narracion',salary:'$600–$1,500 USD/mes',mode:'Remoto',type:'Medio Tiempo',langs:['Español'],time:'Hace 6 horas',desc:'Serie de 3 novelas literarias. Narración expresiva, ritmo sostenido. Home studio profesional.'},
+  {id:8,title:'Narrador/a de Documentales – Serie de Naturaleza',company:'DocuVox Media',cat:'narracion',salary:'$2,000–$5,000 USD/mes',mode:'Remoto',type:'Tiempo Completo',langs:['Español','Inglés'],time:'Hace 1 día',desc:'6 episodios sobre fauna latinoamericana. Voz evocadora, científica pero accesible.'},
+  {id:9,title:'Grabación de Datos de Voz – Modelo IA Multilingüe',company:'NeuralVoice AI',cat:'ia',salary:'$400–$1,000 USD/mes',mode:'Remoto',type:'Medio Tiempo',langs:['Mandarín','Inglés'],time:'Hace 4 horas',desc:'5,000 frases en mandarín e inglés para modelo TTS. Pronunciación nativa imprescindible.'},
+  {id:10,title:'Actor/a de Voz para Asistente Virtual IA',company:'VocalBridge Global',cat:'ia',salary:'$1,000–$3,500 USD/mes',mode:'Remoto',type:'Completo / Medio',langs:['Español','Inglés','Coreano'],time:'Hace 2 días',desc:'Voz para asistente virtual de nueva generación. Trilingüe ES/EN/KO. Sesiones semanales.'},
+  {id:11,title:'Voz para Sistema IVR – Banco Internacional',company:'ClearVox Solutions',cat:'ivr',salary:'$500–$1,200 USD/mes',mode:'Remoto',type:'Medio Tiempo',langs:['Español'],time:'Hace 8 horas',desc:'Sistema telefónico para banco con presencia en 8 países. Voz clara, profesional, neutra.'},
+  {id:12,title:'Narrador/a de Cursos Online – Plataforma E-Learning',company:'EduVox Academy',cat:'educacion',salary:'$1,500–$3,000 USD/mes',mode:'Remoto',type:'Tiempo Completo',langs:['Español'],time:'Hace 5 horas',desc:'12 cursos de marketing digital. Voz pedagógica, energética. 8h de contenido total.'},
+  {id:13,title:'Actor/a de Voz – Serie Animada Internacional',company:'AnimaVox Studios',cat:'animacion',salary:'$3,500–$8,000 USD/mes',mode:'Presencial',type:'Tiempo Completo',langs:['Español','Inglés'],time:'Hace 1 día',desc:'Serie de 26 episodios. 4 personajes principales. Casting abierto. Experiencia en animación.'},
+  {id:14,title:'Intérprete de Voz EN↔ES – Proyecto Corporativo',company:'TransVox Global',cat:'traduccion',salary:'$2,000–$4,000 USD/mes',mode:'Remoto',type:'Tiempo Completo',langs:['Español','Inglés'],time:'Hace 10 horas',desc:'Interpretación simultánea en vivo para conferencias corporativas. Bilingüe nativo.'},
+];
 
-/* STEPS */
-function goStep(n){
-  [1,2,3,4].forEach(i=>{
-    document.getElementById('p'+i).classList.toggle('on',i===n);
-    const s=document.getElementById('s'+i);
-    s.classList.remove('on','done');
-    if(i<n)s.classList.add('done');
-    if(i===n)s.classList.add('on');
-  });
-  document.getElementById('pf').style.width=(n/4*100)+'%';
-  if(n===4)buildPreview();
-  window.scrollTo({top:0,behavior:'smooth'});
+let shownJobs=8;
+function renderOpp(cat='all'){
+  const filtered=cat==='all'?JOBS:JOBS.filter(j=>j.cat===cat);
+  const grid=document.getElementById('opp-grid');
+  grid.innerHTML=filtered.slice(0,shownJobs).map(j=>`
+    <div class="opp-card" onclick="openJob(${j.id})">
+      <div class="opp-time">${j.time}</div>
+      <div class="opp-card-top">
+        <div class="opp-title">${j.title}</div>
+        <div class="opp-salary">${j.salary}</div>
+      </div>
+      <div class="opp-company">${j.company}</div>
+      <div class="opp-tags">
+        ${j.langs.map(l=>`<span class="opp-tag red">${l}</span>`).join('')}
+        <span class="opp-tag grn">${j.mode}</span>
+        <span class="opp-tag">${j.type}</span>
+      </div>
+      <div class="opp-meta"><span>&#9670; ${j.cat}</span></div>
+    </div>`).join('');
 }
-function next(f){if(validate(f))goStep(f+1);}
-function prev(f){goStep(f-1);}
+let currentCat='all';
+function filterOpp(el,cat){
+  document.querySelectorAll('.opp-filter').forEach(f=>f.classList.remove('on'));
+  el.classList.add('on');currentCat=cat;shownJobs=8;renderOpp(cat);
+}
+function loadMoreOpp(){shownJobs+=4;renderOpp(currentCat);}
+renderOpp();
 
-/* VALIDATION */
-function req(id,eid,fn){
-  const v=fn(document.getElementById(id));
-  document.getElementById(id).classList.toggle('err',!v);
-  document.getElementById(eid).classList.toggle('on',!v);
-  return v;
+/* MODAL */
+function openJob(id){
+  const j=JOBS.find(x=>x.id===id);if(!j)return;
+  document.getElementById('modal-content').innerHTML=`
+    <div class="modal-title">${j.title}</div>
+    <div class="modal-sub">${j.company} · ${j.mode} · ${j.type}</div>
+    <div class="modal-salary">${j.salary}</div>
+    <div class="modal-tags">${j.langs.map(l=>`<span class="opp-tag red">${l}</span>`).join('')}<span class="opp-tag grn">${j.mode}</span><span class="opp-tag">${j.type}</span></div>
+    <div class="modal-section"><div class="modal-section-title">Descripción del puesto</div><div class="modal-body">${j.desc}</div></div>
+    <div class="modal-section"><div class="modal-section-title">Publicado</div><div class="modal-body">${j.time}</div></div>`;
+  document.getElementById('job-modal').classList.add('on');
+  document.body.style.overflow='hidden';
 }
-function validate(s){
-  let ok=true;
-  if(s===1){
-    ok=req('fn','efn',e=>e.value.trim()!='')&ok;
-    ok=req('fl','efl',e=>e.value.trim()!='')&ok;
-    ok=req('fe','efe',e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.value.trim()))&ok;
-    ok=req('fc','efc',e=>e.value!='')&ok;
-    ok=req('fla','efla',e=>e.value!='')&ok;
-  }
-  if(s===2){
-    const st=getStyles();
-    document.getElementById('est').classList.toggle('on',st.length===0);
-    if(st.length===0)ok=false;
-    ok=req('fex','efex',e=>e.value!='')&ok;
-    ok=req('fmo','efmo',e=>e.value!='')&ok;
-  }
-  if(s===3)ok=req('fdm','efdm',e=>e.value.trim().length>4)&ok;
-  if(s===4){
-    const tr=document.getElementById('ftr').checked;
-    document.getElementById('etr').classList.toggle('on',!tr);
-    if(!tr)ok=false;
-  }
-  return ok;
-}
-function getStyles(){return[...document.querySelectorAll('#sg input:checked')].map(c=>c.value);}
-function v(id){return document.getElementById(id).value.trim();}
-function collect(){
-  return{
-    fullName:(v('fn')+' '+v('fl')).trim(),email:v('fe'),country:v('fc'),language:v('fla'),
-    telegram:v('ftg'),styles:getStyles().join(', '),experience:v('fex'),modality:v('fmo'),
-    equipment:v('feq'),rate:v('fra'),bio:v('fbi'),demo:v('fdm'),portfolio:v('fpo'),
-    ccc:v('fcc'),fiverr:v('ffv'),instagram:v('fig'),linkedin:v('fli'),youtube:v('fyt'),
-    source:v('fsr'),comments:v('fco'),
-  };
-}
-
-/* PREVIEW */
-function buildPreview(){
-  const d=collect();
-  document.getElementById('preview').innerHTML=`<span class="c">// información básica</span>
-<span class="k">nombre:</span>     <span class="v">${d.fullName}</span>
-<span class="k">email:</span>      <span class="v">${d.email}</span>
-<span class="k">país:</span>       <span class="v">${d.country}</span>
-<span class="k">idioma:</span>     <span class="v">${d.language}</span>
-<span class="k">contacto:</span>   <span class="v">${d.telegram||'—'}</span>
-<span class="c">// perfil profesional</span>
-<span class="k">estilos:</span>    <span class="v">${d.styles}</span>
-<span class="k">experiencia:</span><span class="v">${d.experience}</span>
-<span class="k">modalidad:</span>  <span class="v">${d.modality}</span>
-<span class="k">tarifa:</span>     <span class="v">${d.rate?'$'+d.rate+' USD/hr':'—'}</span>
-<span class="c">// portfolio</span>
-<span class="k">demo:</span>       <span class="v">${d.demo}</span>
-<span class="k">portfolio:</span>  <span class="v">${d.portfolio||'—'}</span>
-<span class="k">redes:</span>      <span class="v">${[d.instagram,d.linkedin,d.youtube].filter(Boolean).join(' · ')||'—'}</span>`;
-}
-
-/* SUBMIT */
-async function submit(){
-  if(!validate(4))return;
-  const d=collect();
-  const id='VBG-'+Math.random().toString(36).substr(2,6).toUpperCase();
-  const ts=new Date().toLocaleString('es-MX');
-  document.getElementById('loader').classList.add('on');
-  document.getElementById('sub-btn').disabled=true;
-  try{
-    await emailjs.send(EJ_SERVICE,EJ_TEMPLATE,{
-      to_email:'support@vocalbridge.space',reg_id:id,reg_date:ts,
-      full_name:d.fullName,email:d.email,country:d.country,language:d.language,
-      telegram:d.telegram||'—',styles:d.styles,experience:d.experience,
-      modality:d.modality,equipment:d.equipment||'—',rate:d.rate||'—',bio:d.bio||'—',
-      demo:d.demo,portfolio:d.portfolio||'—',ccc:d.ccc||'—',fiverr:d.fiverr||'—',
-      instagram:d.instagram||'—',linkedin:d.linkedin||'—',youtube:d.youtube||'—',
-      source:d.source||'—',comments:d.comments||'—',
-    });
-    document.getElementById('loader').classList.remove('on');
-    document.getElementById('pf').parentElement.style.display='none';
-    document.querySelector('.stepbar').style.display='none';
-    [1,2,3,4].forEach(i=>document.getElementById('p'+i).classList.remove('on'));
-    document.getElementById('done').classList.add('on');
-    document.getElementById('done-id').textContent=id;
-    document.getElementById('done-data').innerHTML=`<span class="c">// registrado exitosamente</span>\n<span class="k">id:</span> <span class="v">${id}</span>\n<span class="k">nombre:</span> <span class="v">${d.fullName}</span>\n<span class="k">email:</span> <span class="v">${d.email}</span>\n<span class="k">estilos:</span> <span class="v">${d.styles}</span>`;
-  }catch(err){
-    document.getElementById('loader').classList.remove('on');
-    document.getElementById('sub-btn').disabled=false;
-    alert('Error al enviar. Escríbenos a support@vocalbridge.space\n\n'+JSON.stringify(err));
-  }
-}
-
-function socialLogin(p){
-  alert('Login con '+p+' — próximamente.\nPor ahora regístrate y te enviamos tu ID de acceso.');
-}
-function directLogin(){
-  const id=document.getElementById('lid').value.trim();
-  if(!id){alert('Ingresa tu ID de registro');return;}
-  window.location.href='https://vbg-dashboard.vercel.app/dashboard?id='+encodeURIComponent(id);
-}
+function closeModal(){document.getElementById('job-modal').classList.remove('on');document.body.style.overflow='';}
+document.getElementById('job-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 </script>
 </body>
 </html>
