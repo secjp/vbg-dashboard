@@ -1,8 +1,8 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/auth", "destination": "/public/auth.html" },
+    { "source": "/auth",      "destination": "/public/auth.html" },
     { "source": "/dashboard", "destination": "/public/dashboard.html" },
-    { "source": "/", "destination": "/public/index.html" }
+    { "source": "/",          "destination": "/public/index.html" }
   ]
 }
