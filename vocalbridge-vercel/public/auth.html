@@ -258,7 +258,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
         <div class="s-icon">✓</div>
         <div class="s-title">¡Registro enviado!</div>
         <div class="s-id" id="done-id">VBG-XXXXXX</div>
-        <div class="s-desc">Notificación enviada a <strong style="color:var(--red2)">support@vocalbridge.space</strong><br>Recibirás confirmación en 24–48 horas.<br>Guarda tu ID para el sistema de matching.</div>
+        <div class="s-desc">Notificación enviada a <strong style="color:var(--red2)">support@vocalbridge.org</strong><br>Recibirás confirmación en 24–48 horas.<br>Guarda tu ID para el sistema de matching.</div>
         <div class="code-block" id="done-data"></div>
       </div>
 
@@ -419,7 +419,7 @@ textarea.inp{resize:vertical;min-height:72px;font-size:11px;line-height:1.6}
       <button class="vb sol fw" onclick="directLogin()">&#9670; Acceder al panel</button>
       <div class="ln">
         ¿Primera vez? <a href="#" onclick="mode('reg');return false">Crear cuenta gratis</a><br>
-        ¿Olvidaste tu ID? <a href="mailto:support@vocalbridge.space">support@vocalbridge.space</a>
+        ¿Olvidaste tu ID? <a href="mailto:support@vocalbridge.org">support@vocalbridge.org</a>
       </div>
     </div>
   </div>
@@ -536,7 +536,7 @@ async function submit(){
   document.getElementById('sub-btn').disabled=true;
   try{
     await emailjs.send(EJ_SERVICE,EJ_TEMPLATE,{
-      to_email:'support@vocalbridge.space',reg_id:id,reg_date:ts,
+      to_email:'support@vocalbridge.org',reg_id:id,reg_date:ts,
       full_name:d.fullName,email:d.email,country:d.country,language:d.language,
       telegram:d.telegram||'—',styles:d.styles,experience:d.experience,
       modality:d.modality,equipment:d.equipment||'—',rate:d.rate||'—',bio:d.bio||'—',
@@ -554,7 +554,7 @@ async function submit(){
   }catch(err){
     document.getElementById('loader').classList.remove('on');
     document.getElementById('sub-btn').disabled=false;
-    alert('Error al enviar. Escríbenos a support@vocalbridge.space\n\n'+JSON.stringify(err));
+    alert('Error al enviar. Escríbenos a support@vocalbridge.org\n\n'+JSON.stringify(err));
   }
 }
 
